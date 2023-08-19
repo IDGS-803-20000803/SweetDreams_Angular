@@ -28,11 +28,6 @@ export class SidebarComponent {
         router:['/','empleados']
       },
       {
-        nombre:'Puestos',
-        icono:'uil uil-hard-hat',
-        router:['/','puestos']
-      },
-      {
         nombre:'Departamentos',
         icono:'uil uil-house-user',
         router:['/','departamentos']

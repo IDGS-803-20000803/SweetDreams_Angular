@@ -1,7 +1,46 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-4">
+        <div class="col-2">
             <app-sidebar></app-sidebar>
+        </div>
+        <div class="col-9">
+                <h1 class="text-center"><b>EMPLEADOS</b></h1>
+                <div class="mb-3">
+                  <button class="btn btn-danger" (click)="openInsertWindow()" >AGREGAR(+)</button>
+                </div>
+                <div>
+                  <table class="table text-center">
+                    <thead>
+                      <tr>
+                        <th>Nombres</th>
+                        <th>RFC</th>
+                        <th>CURP</th>
+                        <th>Celular</th>
+                        <th>Calle</th>
+                        <th>Colonia</th>
+                        <th>Foto</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let data of dataSource">
+                        <td *ngIf="data.baja === 0">{{ data.nombres }}</td>
+                        <td *ngIf="data.baja === 0">{{ data.rfc }}</td>
+                        <td *ngIf="data.baja === 0">{{ data.curp }}</td>
+                        <td *ngIf="data.baja === 0">{{ data.celular }}</td>
+                        <td *ngIf="data.baja === 0">{{ data.calle }}</td>
+                        <td *ngIf="data.baja === 0">{{data.colonia}}</td>
+                        <td *ngIf="data.baja === 0"><img src="{{ data.fotoEmpleado }}" alt="" width="50px" height="50px"></td>
+                        <td *ngIf="data.baja === 0">
+                          <button class="btn btn-warning m-1" (click)="openEditWindow(data)">EDITAR</button>
+                          <button class="btn btn-danger m-1" (click)="dropEmpleado(data.id)">ELIMINAR</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+              
+            </div>
         </div>
     </div>
 </div>
+

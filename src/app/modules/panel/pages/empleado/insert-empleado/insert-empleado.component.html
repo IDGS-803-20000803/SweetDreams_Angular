@@ -1,0 +1,72 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4">
+            <app-sidebar></app-sidebar>
+        </div>
+        <div class="col-8">
+            <form class="form_main" (ngSubmit)="AgregarEmpleado()">
+                <p class="heading">Agregar Empleado</p>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="inputContainer">
+                        <input [(ngModel)]="user.name" placeholder="Nombres" name="nombres" class="inputField" type="text" >
+                        </div>
+                        <div class="inputContainer">
+                        <input [(ngModel)]="user.email" placeholder="Correo" name="correo" class="inputField" type="text" >
+                        </div>
+                        <div class="inputContainer">
+                            <input [(ngModel)]="user.password" placeholder="Password" name="password" class="inputField" type="password">
+                        </div>
+                        <div class="inputContainer">
+                            <input [(ngModel)]="emple.apePaterno" placeholder="Apellido Paterno" name="apePaterno" class="inputField" type="text" >
+                        </div>
+                        <div class="inputContainer">
+                            <input [(ngModel)]="emple.apeMaterno" placeholder="Apellido Materno" name="apeMaterno" class="inputField" type="text" >
+                        </div>
+
+                        <div class="inputContainer">
+                        <input [(ngModel)]="emple.rfc" placeholder="RFC" name="rfc" class="inputField" type="text" >
+                        </div>
+                        <div class="inputContainer">
+                        <input [(ngModel)]="emple.curp" placeholder="CURP" name="curp" class="inputField" type="text" >
+                        </div>
+                        <div class="inputContainer">
+                            <select class="form-select" name="departamentoId" [(ngModel)]="emple.departamentoId">
+                              <option *ngFor="let data of dataDepart" [value]="data.id">{{ data.departamento1 }}</option>
+                            </select>
+                        </div> 
+                    </div>
+                    <div class="col-6">
+                        <div class="inputContainer">
+                            <input [(ngModel)]="emple.numSeguroSocial" placeholder="NumSeguroSocial" name="numSeguroSocial" class="inputField" type="text" >
+                        </div>
+                        <div class="inputContainer">
+                            <input [(ngModel)]="emple.celular" placeholder="Celular" name="celular" class="inputField" type="text" >
+                        </div>
+                        <div class="inputContainer">
+                            <input [(ngModel)]="emple.alergias" placeholder="Alergias" name="alergias" class="inputField" type="text" >
+                        </div>
+
+                        <div class="inputContainer">
+                            <input [(ngModel)]="emple.observaciones" placeholder="Observaciones" name="observaciones" class="inputField" type="text" >
+                        </div>
+                        <div class="inputContainer">
+                            <input [(ngModel)]="emple.codigoPostal" placeholder="CP" name="codigoPostal" class="inputField" type="text" >
+                        </div>
+                        <div class="inputContainer">
+                            <input [(ngModel)]="emple.calle" placeholder="Calle" name="calle" class="inputField" type="text" >
+                        </div>
+                        <div class="inputContainer">
+                            <input [(ngModel)]="emple.colonia" placeholder="Colonia" name="colonia" class="inputField" type="text" >
+                        </div>
+                        
+                        <div class="inputContainer">
+                            <input type="file" class="form-control" accept="image/*" id="inputFile" name="fotoEmpleado" />
+                        </div> 
+                    </div>
+                </div>
+            <button id="button">Agregar</button>
+            </form>
+        </div>
+    </div>
+</div>

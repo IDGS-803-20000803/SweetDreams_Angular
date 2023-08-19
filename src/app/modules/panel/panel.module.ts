@@ -39,6 +39,8 @@ import { InsertEntradaComponent } from './pages/inventario/entradas/insert-entra
 import { SalidasComponent } from './pages/inventario/salidas/salidas.component';
 import { InsertSalidasComponent } from './pages/inventario/salidas/insert-salidas/insert-salidas.component';
 import { NgChartsModule } from 'ng2-charts';
+import { InsertEmpleadoComponent } from './pages/empleado/insert-empleado/insert-empleado.component';
+import { ActualizarEmpleadoComponent } from './pages/empleado/actualizar-empleado/actualizar-empleado.component';
 
 
 
@@ -76,7 +78,9 @@ import { NgChartsModule } from 'ng2-charts';
     EntradasComponent,
     InsertEntradaComponent,
     SalidasComponent,
-    InsertSalidasComponent
+    InsertSalidasComponent,
+    InsertEmpleadoComponent,
+    ActualizarEmpleadoComponent
   ],
   imports: [
     CommonModule,

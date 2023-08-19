@@ -42,6 +42,8 @@ import { EntradasComponent } from './modules/panel/pages/inventario/entradas/ent
 import { InsertEntradaComponent } from './modules/panel/pages/inventario/entradas/insert-entrada/insert-entrada.component';
 import { SalidasComponent } from './modules/panel/pages/inventario/salidas/salidas.component';
 import { InsertSalidasComponent } from './modules/panel/pages/inventario/salidas/insert-salidas/insert-salidas.component';
+import { InsertEmpleadoComponent } from './modules/panel/pages/empleado/insert-empleado/insert-empleado.component';
+import { ActualizarEmpleadoComponent } from './modules/panel/pages/empleado/actualizar-empleado/actualizar-empleado.component';
 
 
 
@@ -104,10 +106,16 @@ const routes: Routes = [
       canActivate:[SessionsGuard]
     },
     {
-      path:'puestos',
-      component:PuestosComponent,
+      path:'InsertarEmpleado',
+      component:InsertEmpleadoComponent,
       canActivate:[SessionsGuard]
     },
+    {
+      path:'ActualizarEmpleado/:id',
+      component:ActualizarEmpleadoComponent,
+      canActivate:[SessionsGuard]
+    },
+   
     {
       path:'departamentos',
       component:DepartamentosComponent,
