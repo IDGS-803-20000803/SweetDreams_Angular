@@ -26,7 +26,7 @@ export class EmpleadoComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `NO HAY DATOS EN LA BD: ${error}`,
+          text: `Es necesario llamar al administrador del sistema: ${error}`,
         });
       },
     })
@@ -37,65 +37,84 @@ export class EmpleadoComponent {
   }
 
   openEditWindow(data: any) {
-    this.router.navigate([`/ActualizarEmpleado/${data.id}`]);
+    this.router.navigate([`/ActualizarEmpleado/${data.idEmpleado}`]);
   }
 
   dropEmpleado(id: number) {
-    this.service.obtenerEmpleado(id).subscribe({
-      next: (response) => {
-        this.dtEmpleado = response;
-        console.log('Datos Empleado', this.dtEmpleado);
-        this.idUser = this.dtEmpleado.userId
-        console.log('Id Usuario:', this.idUser);
-        
-        this.dtEmpleado.baja = 1
-        this.service.actualizarEmpleado(this.dtEmpleado).subscribe({
-          next:() => {
-              this.service.obtenerUsuario(this.idUser).subscribe({
-                next: (response) =>{
-                  this.dtusuario = response
-                  this.dtusuario.active = 1
-                  this.service.ActualizarUser(this.dtusuario).subscribe({
-                      next:() =>{
-                          window.location.reload()
-                      },
-                      error: (error) => {
-                        Swal.fire({
-                          icon: 'error',
-                          title: 'Error de Server',
-                          text: `Error al eliminar usuario: ${error}`,
-                        });
-                      },
+    Swal.fire({
+      title: "¿Estas Seguro de eliminar el empleado?",
+      text: "Esta Accion no puede revertirse",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, Borrarlo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Borrado!",
+          text: "El empleado ha sido borrado.",
+          icon: "success"
+        });
+        this.service.obtenerEmpleado(id).subscribe({
+          next: (response) => {
+            this.dtEmpleado = response;
+            console.log('Datos Empleado', this.dtEmpleado);
+            this.idUser = this.dtEmpleado.idUsuario
+            console.log('Id Usuario:', this.idUser);
+            
+            this.dtEmpleado.estatus = false
+            this.service.actualizarEmpleado(this.dtEmpleado).subscribe({
+              next:() => {
+                  this.service.obtenerUsuario(this.idUser).subscribe({
+                    next: (response) =>{
+                      this.dtusuario = response
+                      this.dtusuario.activo = 1
+                      this.service.ActualizarUser(this.dtusuario).subscribe({
+                          next:() =>{
+                              window.location.reload()
+                          },
+                          error: (error) => {
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Error de Server',
+                              text: `Error al eliminar usuario: ${error}`,
+                            });
+                          },
+                      });
+                    },
+                    error: (error) => {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Error de Server',
+                        text: `Error al obtener informacion del usuario: ${error}`,
+                      });
+                    },
                   });
-                },
-                error: (error) => {
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'Error de Server',
-                    text: `Error al obtener informacion del usuario: ${error}`,
-                  });
-                },
-              });
+              },
+              error: (error) => {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error de Server',
+                  text: `Error al eliminar el empleado: ${error}`,
+                });
+              },
+            });
+    
+           
           },
           error: (error) => {
             Swal.fire({
               icon: 'error',
               title: 'Error de Server',
-              text: `Error al eliminar el empleado: ${error}`,
+              text: `Error al Obtener Registro del empleado: ${error}`,
             });
           },
         });
-
-       
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de Server',
-          text: `Error al Obtener Registro del empleado: ${error}`,
-        });
-      },
+    
+      }
     });
+   
 
 
   }

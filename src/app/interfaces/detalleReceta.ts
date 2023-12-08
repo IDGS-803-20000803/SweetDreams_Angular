@@ -1,9 +1,8 @@
 export interface DetalleReceta {
-    id: number;
-    ingredienteId: number;
+    idDetalleReceta: number;
+    idIngrediente: number;
     cantidad: number;
-    instruccion: string;
-    unidadMedidaId: number;
-    recetaId: number;
-    baja: number;
+    descripcion: string;
+    idReceta: number;
+    estatus: boolean;
   }

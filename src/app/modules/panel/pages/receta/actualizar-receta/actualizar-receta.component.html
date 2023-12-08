@@ -9,38 +9,33 @@
                 <div class="row">
                     <div class="col-12" style="display: none;">
                         <div class="inputContainer">
-                            <input name="id" [(ngModel)]="actReceta.id" placeholder="Id" class="inputField" type="text" >
+                            <input name="idReceta" [(ngModel)]="actReceta.idReceta" placeholder="Id" class="inputField" type="text" >
                         </div>  
                     </div>
                     <div class="col-6">
                         <div class="inputContainer">
-                            <input name="receta" [(ngModel)]="actReceta.receta" placeholder="Nombre" class="inputField" type="text" >
-                        </div>  
-                    </div>
-                    <div class="col-6">
-                        <div class="inputContainer">
-                            <input name="descripcion" [(ngModel)]="actReceta.descripcion" placeholder="Descripción" class="inputField" type="text" >
+                            <input name="nombreReceta" [(ngModel)]="actReceta.nombreReceta" placeholder="Nombre" class="inputField" type="text" >
                         </div>  
                     </div>
                     <div class="col-4">
                         <div class="inputContainer">
-                            <input name="duracion" [(ngModel)]="actReceta.duracion" placeholder="Duración" class="inputField" type="text" >
+                            <input name="tiempoDuracion" [(ngModel)]="actReceta.tiempoDuracion" placeholder="Duración" class="inputField" type="text" >
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <p class="heading">Instrucciones</p>
-                    <div class="col-6">
+                    <div class="col-12">
                         <div class="inputContainer">
-                            <select class="form-select" name="ingredienteId" [(ngModel)]="ingredienteId">
-                                <option *ngFor="let data of dataIngredient" [value]="data.id">{{ data.ingrediente1 }}</option>
+                            <select class="form-select" name="idIngrediente" [(ngModel)]="ingredienteId" (ngModelChange)="ObtenerUnidadIngrediente()">
+                                <option *ngFor="let data of dataIngredient"  [value]="data.idIngrediente" >{{ data.nombre }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-6">
-                        <select class="form-select" name="unidadMedidaId" [(ngModel)]="unidadMedidaId">
-                            <option *ngFor="let data of dataUnit" [value]="data.id">{{ data.unidad }}</option>
-                        </select>
+                        <div class="inputContainer">
+                            <input name="unidadMedida" [(ngModel)]="unidadMedida"  class="inputField" type="text" disabled="true"  >
+                        </div>  
                     </div>
                     <div class="col-4">
                         <div class="inputContainer">
@@ -79,18 +74,18 @@
                   <tr *ngFor="let data of dtReceta">
                     <td>
                       <div *ngFor="let i of dataIngredient">
-                        <p *ngIf="data.ingredienteId == i.id">{{ i.ingrediente1 }}</p>
+                        <p *ngIf="data.idIngrediente == i.idIngrediente">{{ i.nombre }}</p>
                       </div>
                     </td>
                     <td>{{ data.cantidad }}</td>
                     <td>
-                      <div *ngFor="let u of dataUnit">
-                        <p *ngIf="data.unidadMedidaId == u.id">{{ u.unidad }}</p>
-                      </div>
+                        <div *ngFor="let i of dataIngredient">
+                            <p *ngIf="data.idIngrediente == i.idIngrediente">{{ i.unidadMedida }}</p>
+                          </div>
                     </td>
-                    <td>{{ data.instruccion }}</td>
+                    <td>{{ data.descripcion }}</td>
                     <td>
-                      <button id="button" class="btn btn-danger m-1" (click)="dropDetail(data.id)">
+                      <button id="button" class="btn btn-danger m-1" (click)="dropDetail(data.idIngrediente)" >
                         ELIMINAR
                       </button>
                     </td>

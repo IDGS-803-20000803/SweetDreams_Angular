@@ -12,6 +12,7 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
   providers: [CookieService]
 })
 export class AuthPageComponent {
+
   public dtUsuario:any =[]
   public dtRolUser:any=[]
 
@@ -35,14 +36,14 @@ export class AuthPageComponent {
           console.log('Datos DB:', this.dtUsuario);
           this.dtUsuario.forEach((usuario: any) => {
           
-            if (usuario.email === this.user.username && usuario.password === this.user.password && usuario.active === 0) {
+            if (usuario.nombre === this.user.username && usuario.contrasena === this.user.password && usuario.activo === 0) {
               Swal.fire({
                 icon: 'success',
                 title: 'Bienvenido a Sweet Dreams',
                 text: 'Usuario y Contraseña Correctos',
               });
               this.coincidencia = 1
-              this.tipoRol = usuario.id
+              this.tipoRol = usuario.idUsuario
             }
           });
           console.log('Existe el usuario', this.coincidencia);
@@ -53,6 +54,7 @@ export class AuthPageComponent {
               title: 'Usuario o Contraseña Inconrrectos',
               text: 'Por favor vuelva a intentarlo.',
             });
+            
             return;
           }
           else{
@@ -61,13 +63,13 @@ export class AuthPageComponent {
                 this.dtRolUser = response
                 this.dtRolUser.forEach((usuario: any) => {
           
-                  if (usuario.userId === this.tipoRol) {
+                  if (usuario.idUsuario === this.tipoRol) {
      
-                      if(usuario.roleId === 2){//Cliente
+                      if(usuario.idRol === 2){//Cliente
                        this.cookie.set('token','password',1,'/')
                        this.router.navigate(['/','panel']) 
                       }
-                      if(usuario.roleId === 3 || usuario.roleId === 1){//Empleado y ADMIN
+                      if(usuario.idRol === 3 || usuario.idRol === 1){//Empleado y ADMIN
                         this.cookie.set('token','password',1,'/')
                         this.router.navigate(['/','panel']) 
                       }

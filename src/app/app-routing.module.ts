@@ -16,7 +16,6 @@ import { PuestosComponent } from './modules/panel/pages/puestos/puestos.componen
 import { EmpleadoComponent } from './modules/panel/pages/empleado/empleado.component';
 import { ClienteComponent } from './modules/panel/pages/cliente/cliente.component';
 import { DashboardComponent } from './modules/panel/pages/dashboard/dashboard.component';
-import { LoginComponent } from './modules/auth/pages/login/login.component';
 import { RegisterComponent } from './modules/auth/pages/register/register.component';
 import { InicioPageComponent } from './modules/home/pages/inicio-page/inicio-page.component';
 import { AboutPageComponent } from './modules/home/pages/about-page/about-page.component';
@@ -44,6 +43,8 @@ import { SalidasComponent } from './modules/panel/pages/inventario/salidas/salid
 import { InsertSalidasComponent } from './modules/panel/pages/inventario/salidas/insert-salidas/insert-salidas.component';
 import { InsertEmpleadoComponent } from './modules/panel/pages/empleado/insert-empleado/insert-empleado.component';
 import { ActualizarEmpleadoComponent } from './modules/panel/pages/empleado/actualizar-empleado/actualizar-empleado.component';
+import { InsertComprasComponent } from './modules/panel/pages/compras/insert-compras/insert-compras.component';
+import { UpdateComprasComponent } from './modules/panel/pages/compras/update-compras/update-compras.component';
 
 
 
@@ -96,7 +97,7 @@ const routes: Routes = [
       canActivate:[SessionsGuard]
     },
     {
-      path:'ActualizarCliente/:id',
+      path:'ActualizarCliente/:idCliente',
       component:ActualizarClienteComponent,
       canActivate:[SessionsGuard]
     },
@@ -111,7 +112,7 @@ const routes: Routes = [
       canActivate:[SessionsGuard]
     },
     {
-      path:'ActualizarEmpleado/:id',
+      path:'ActualizarEmpleado/:idEmpleado',
       component:ActualizarEmpleadoComponent,
       canActivate:[SessionsGuard]
     },
@@ -142,7 +143,7 @@ const routes: Routes = [
       canActivate:[SessionsGuard]
     },
     {
-      path:'editProveedor/:id',
+      path:'editProveedor/:idProveedor',
       component:UpdateProveedorComponent,
       canActivate:[SessionsGuard]
     },
@@ -154,6 +155,16 @@ const routes: Routes = [
     {
       path:'compras',
       component: ComprasComponent,
+      canActivate:[SessionsGuard]
+    },
+    {
+      path:'agregarCompra',
+      component: InsertComprasComponent,
+      canActivate:[SessionsGuard]
+    },
+    {
+      path:'detalleCompra/:idCompra',
+      component: UpdateComprasComponent,
       canActivate:[SessionsGuard]
     },
     {
@@ -182,12 +193,12 @@ const routes: Routes = [
       canActivate:[SessionsGuard]
     },
     {
-      path:'editReceta/:id',
+      path:'editReceta/:idReceta',
       component:ActualizarRecetaComponent,
       canActivate:[SessionsGuard]
     },
     {
-      path:'detalle/:id',
+      path:'detalle/:idReceta',
       component:DetalleRecetaComponent,
       canActivate:[SessionsGuard]
     },
@@ -202,25 +213,11 @@ const routes: Routes = [
       canActivate:[SessionsGuard]
     },
     {
-      path:'editIngredientes/:id',
+      path:'editIngredientes/:idIngrediente',
       component:ActualizarIngredienteComponent,
       canActivate:[SessionsGuard]
     },
-    {
-      path:'unidades',
-      component:UnidadComponent,
-      canActivate:[SessionsGuard]
-    },
-    {
-      path:'insertUnidades',
-      component:UnidadesInsertarComponent,
-      canActivate:[SessionsGuard]
-    },
-    {
-      path:'editUnidades/:id',
-      component:UnidadesEditarComponent,
-      canActivate:[SessionsGuard]
-    },
+    
     {
       path:'inventario',
       component:InventarioComponent,

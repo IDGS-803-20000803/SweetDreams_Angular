@@ -16,31 +16,28 @@ export class InsertarClienteComponent {
   constructor(public services:ClienteService, private router:Router){}
 
   user:Usuario ={
-    id:0,
-    name:'',
-    email:'',
-    password:'',
-    active:0,
-    confirmed_at:new Date()
+    idUsuario:0,
+    nombre:'',
+    correo:'',
+    contrasena:'',
+    activo:0,
+    fechaCreacion:new Date()
   }
   client:Cliente ={
-    id:0,
+    idCliente:0,
     nombres:'',
     apellidos:'',
     celular:'',
     codigoPostal:'',
     calle:'',
     colonia:'',
-    fechaCreacion:new Date(),
-    fechaModificacion: new Date(),
-    usuarioModificacion: 0,
-    baja:0,
-    userId:0
+    estatus:true,
+    idUsuario:0
   }
   rol:rolUser = {
-    id:0,
-    roleId:2,
-    userId:0
+    idRolUsuario:0,
+    idRol:2,
+    idUsuario:0
   }
   coincidencia:number=0
   public dtUsuario:any =[]
@@ -54,14 +51,14 @@ export class InsertarClienteComponent {
   AgregarCliente(){
     // Verificar si los campos están vacíos
     if (
-      this.user.name === '' ||
+      this.user.nombre === '' ||
       this.client.apellidos === '' ||
       this.client.celular === '' ||
       this.client.codigoPostal === '' ||
       this.client.calle === '' ||
       this.client.colonia === '' ||
-      this.user.email === '' ||
-      this.user.password === ''
+      this.user.correo === '' ||
+      this.user.contrasena === ''
     ) {
       Swal.fire({
         icon: 'error',
@@ -75,7 +72,7 @@ export class InsertarClienteComponent {
   const ObtenerUsuarios = () => {
 
     this.dtUsuario.forEach((usuario: any) => {
-      if (usuario.email === this.user.email && usuario.active === 0) {
+      if (usuario.correo === this.user.correo && usuario.activo === 0) {
         Swal.fire({
           icon: 'error',
           title: 'Ya existe este correo',
@@ -100,12 +97,12 @@ export class InsertarClienteComponent {
         // Llamamos a la función auxiliar dentro de la suscripción para asegurarnos de que los datos estén disponibles
          ObtenerUsuarios();
          this.user = {
-          id:0,
-          name:'',
-          email:'',
-          password:'',
-          active:0,
-          confirmed_at:new Date()
+          idUsuario:0,
+          nombre:'',
+          correo:'',
+          contrasena:'',
+          activo:0,
+          fechaCreacion:new Date()
           };
 
           
@@ -133,8 +130,8 @@ export class InsertarClienteComponent {
             next: response => {
               this.dtUsuario = response;
               this.dtUsuarioFinal = this.dtUsuario[this.dtUsuario.length -1]
-              this.IdUsuarioCreado = this.dtUsuarioFinal.id
-              this.NombreUsuarioCreado = this.dtUsuarioFinal.name
+              this.IdUsuarioCreado = this.dtUsuarioFinal.idUsuario
+              this.NombreUsuarioCreado = this.dtUsuarioFinal.nombre
           
               
               this.AgregarClienteF()
@@ -161,10 +158,10 @@ export class InsertarClienteComponent {
   AgregarClienteF()
   {
     this.client.nombres = this.NombreUsuarioCreado
-    this.client.userId = this.IdUsuarioCreado
+    this.client.idUsuario = this.IdUsuarioCreado
 
-    this.rol.userId = this.IdUsuarioCreado
-    this.rol.roleId = 2
+    this.rol.idUsuario = this.IdUsuarioCreado
+    this.rol.idRol = 2
     console.log('Datos del cliente a insertar', this.client);
     
     this.services.AgregarCliente(this.client ).subscribe({
@@ -172,20 +169,17 @@ export class InsertarClienteComponent {
         console.log('Despues de Insertar el Cliente', res);
         this.AsignarRol()
         this.client ={
-          id:0,
+          idCliente:0,
           nombres: '',
           apellidos: '',
           celular: '',
           codigoPostal: '',
           calle: '',
           colonia: '',
-          fechaCreacion:new Date(),
-          fechaModificacion: new Date(),
-          usuarioModificacion: 0,
-          baja:0,
-          userId:0
+          estatus:true,
+          idUsuario:0
          }
-         window.location.reload()
+        // window.location.reload()
       },
       error: error => console.log(error)
     });

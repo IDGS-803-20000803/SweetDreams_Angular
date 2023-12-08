@@ -16,39 +16,28 @@ export class InsertEmpleadoComponent {
   constructor(public services:EmpleadoService, private router:Router, private depart: DepartamentoServicesService){}
 
   user:Usuario ={
-    id:0,
-    name:'',
-    email:'',
-    password:'',
-    active:0,
-    confirmed_at:new Date()
+    idUsuario:0,
+    nombre:'',
+    correo:'',
+    contrasena:'',
+    activo:0,
+    fechaCreacion:new Date()
   }
   emple:Empleado ={
-    id: 0,
+    idEmpleado: 0,
     nombres: '',
-    apePaterno: '',
-    apeMaterno: '',
-    fotoEmpleado: '',
-    rfc: '',
-    curp: '',
-    numSeguroSocial: '',
+    apellidos:'',
     celular: '',
-    alergias: '',
-    observaciones: '',
     codigoPostal: '',
     calle: '',
     colonia: '',
-    baja: 0,
-    fechaCreacion: new Date(),
-    fechaModificacion: new Date(),
-    usuarioModificacion: 0,
-    departamentoId: 0,
-    userId: 0
+    estatus: true,
+    idUsuario: 0
   }
   rol:rolUser = {
-    id:0,
-    roleId:3,
-    userId:0
+    idRolUsuario:0,
+    idRol:3,
+    idUsuario:0
   }
   coincidencia:number=0
   public dtUsuario:any =[]
@@ -59,86 +48,25 @@ export class InsertEmpleadoComponent {
 
   dtEmpleado: any =[]
   dtRoles: any = []
-  dataDepart: any = [];
+
 
   ngOnInit(): void {
-     
-    this.depart.showDepartments().subscribe({
-      next: (response) => {
-        this.dataDepart = response;
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de Server',
-          text: `ERROR AL ELIMINAR EL REGISTRO DE LA BD: ${error}`,
-        });
-      },
-    });
-
-    const inputFile = document.getElementById('inputFile') as HTMLInputElement;
-
-    if (inputFile) {
-      inputFile.addEventListener('change', async (event) => {
-        const selectedFile = (event.target as HTMLInputElement).files?.[0]; // Usamos el operador de opción nula (?.) para acceder a la propiedad
-        if (selectedFile) {
-          try {
-            const base64Image = this.imageToBase64(selectedFile);
-
-            this.emple.fotoEmpleado = await base64Image.then((data) => 'data:image/jpeg;base64,' + data);
-
-          } catch (error) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error de Server',
-              text: `Error de conversion de imagen: ${error}`,
-            });
-          }
-        }
-      });
-
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error de Server',
-        text: 'No se encontró el elemento inputFile.',
-      });
-      
-    }
+    
   }
 
-  imageToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
 
-      reader.onload = () => {
-        if (reader.result && typeof reader.result === 'string') {
-          const base64Data = reader.result.split(',')[1]; // Eliminamos "data:image/jpeg;base64,"
-          resolve(base64Data);
-        } else {
-          reject(new Error('Error al leer el archivo.'));
-        }
-      };
-
-      reader.onerror = () => {
-        reject(new Error('Error al cargar el archivo.'));
-      };
-
-      reader.readAsDataURL(file);
-    });
-  }
 
   AgregarEmpleado(){
     // Verificar si los campos están vacíos
     if (
-      this.user.name === '' ||
-      this.emple.apeMaterno === '' || 
+      this.user.nombre === '' ||
+      this.emple.apellidos === '' || 
       this.emple.celular === '' ||
       this.emple.codigoPostal === '' ||
       this.emple.calle === '' ||
       this.emple.colonia === '' ||
-      this.user.email === '' ||
-      this.user.password === ''
+      this.user.correo === '' ||
+      this.user.contrasena === ''
     ) {
       Swal.fire({
         icon: 'error',
@@ -152,7 +80,7 @@ export class InsertEmpleadoComponent {
   const ObtenerUsuarios = () => {
 
     this.dtUsuario.forEach((usuario: any) => {
-      if (usuario.email === this.user.email && usuario.active === 0) {
+      if (usuario.correo === this.user.correo && usuario.activo === 0) {
         Swal.fire({
           icon: 'error',
           title: 'Ya existe este correo',
@@ -177,12 +105,12 @@ export class InsertEmpleadoComponent {
         // Llamamos a la función auxiliar dentro de la suscripción para asegurarnos de que los datos estén disponibles
          ObtenerUsuarios();
          this.user = {
-          id:0,
-          name:'',
-          email:'',
-          password:'',
-          active:0,
-          confirmed_at:new Date()
+          idUsuario:0,
+          nombre:'',
+          correo:'',
+          contrasena:'',
+          activo:0,
+          fechaCreacion:new Date()
           };
 
           
@@ -210,8 +138,8 @@ export class InsertEmpleadoComponent {
             next: response => {
               this.dtUsuario = response;
               this.dtUsuarioFinal = this.dtUsuario[this.dtUsuario.length -1]
-              this.IdUsuarioCreado = this.dtUsuarioFinal.id
-              this.NombreUsuarioCreado = this.dtUsuarioFinal.name
+              this.IdUsuarioCreado = this.dtUsuarioFinal.idUsuario
+              this.NombreUsuarioCreado = this.dtUsuarioFinal.nombre
           
               
               this.AgregarEmpleadoF()
@@ -238,10 +166,10 @@ export class InsertEmpleadoComponent {
   AgregarEmpleadoF()
   {
     this.emple.nombres = this.NombreUsuarioCreado
-    this.emple.userId = this.IdUsuarioCreado
+    this.emple.idUsuario = this.IdUsuarioCreado
 
-    this.rol.userId = this.IdUsuarioCreado
-    this.rol.roleId = 3
+    this.rol.idUsuario = this.IdUsuarioCreado
+    this.rol.idRol = 3
     console.log('Datos del empleado a insertar', this.emple);
     
     this.services.AgregarEmpleado(this.emple ).subscribe({
@@ -249,26 +177,15 @@ export class InsertEmpleadoComponent {
         console.log('Despues de Insertar el empleado', res);
         this.AsignarRol()
         this.emple ={
-          id: 0,
+          idEmpleado: 0,
           nombres: '',
-          apePaterno: '',
-          apeMaterno: '',
-          fotoEmpleado: '',
-          rfc: '',
-          curp: '',
-          numSeguroSocial: '',
+          apellidos: '',
           celular: '',
-          alergias: '',
-          observaciones: '',
           codigoPostal: '',
           calle: '',
           colonia: '',
-          baja: 0,
-          fechaCreacion: new Date(),
-          fechaModificacion: new Date(),
-          usuarioModificacion: 0,
-          departamentoId: 0,
-          userId: 0
+          estatus: true,
+          idUsuario: 0
          }
         window.location.reload()
       },

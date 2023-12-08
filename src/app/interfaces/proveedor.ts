@@ -1,17 +1,10 @@
 export interface Proveedor {
-    id: number;
+    idProveedor: number;
     razonSocial: string;
     rfc: string;
-    alias: string;
-    baja: number;
-    correo: string;
+    estatus: boolean;
     celular: string;
-    ciudad: string;
-    estado: string;
     codigoPostal: string;
     calle: string;
     colonia: string;
-    fechaCreacion: Date;
-    fechaModificiacion: Date;
-    usuarioModificacion: number;
   }

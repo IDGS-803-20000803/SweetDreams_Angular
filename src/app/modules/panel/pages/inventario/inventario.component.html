@@ -29,24 +29,25 @@
                     <th>Existencia Inicial</th>
                     <th>Existencia Actual</th>
                     <th>Fecha Entrada</th>
+                    <th>Fecha Modificacion</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of dataSource">
                     <td>
                       <div *ngFor="let i of dtIngredientes">
-                          <p *ngIf="data.ingredienteId == i.id">{{ i.ingrediente1 }}</p>
+                          <p *ngIf="data.idIngrediente == i.idIngrediente">{{ i.nombre }}</p>
                       </div>
                   </td>
                   <td>
-                      <div *ngFor="let u of dtUnidades">
-                          <p *ngIf="data.unidadMedidaId == u.id">{{ u.unidad }}</p>
+                      <div *ngFor="let i of dtIngredientes">
+                          <p *ngIf="data.idIngrediente == i.idIngrediente">{{ i.unidadMedida }}</p>
                       </div>
                   </td>
                   <td>{{ data.existenciaInicial }}</td>
                   <td>{{ data.existenciaActual}}</td>
                   <td>{{data.fechaEntrada}}</td>
-                
+                  <td>{{data.fechaModificacion }}</td>
                   </tr>
                 </tbody>
               </table>

@@ -13,12 +13,11 @@ import { UnidadesService } from '../unidades/unidades.service';
 export class InventarioComponent {
 
   constructor(private router: Router, private services: InventarioService,
-    private IngredienteS : IngredienteServicesService,
-    private unidadS : UnidadesService){}
+    private IngredienteS : IngredienteServicesService){}
 
   dataSource: any = [];
   dtIngredientes:any = []
-  dtUnidades: any =[]
+
 
   ngOnInit(): void {
     this.services.getInventario().subscribe({
@@ -46,18 +45,6 @@ export class InventarioComponent {
       },
     });
 
-    this.unidadS.showUnits().subscribe({
-      next: (response) => {
-        this.dtUnidades = response;
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de Server',
-          text: `Error al consultar unidades medida: ${error}`,
-        });
-      },
-    });
   }
   Entradas()
   {

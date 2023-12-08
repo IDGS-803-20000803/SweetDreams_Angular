@@ -13,6 +13,9 @@ export class MenuComponent {
   constructor(public menu: MenuService, private router: Router, private receta: RecetaService) { }
 
   dataSource: any = [];
+  dtMenus:any = [];
+  dtMenuActualizar :any =[];
+  dtReceta :any = [];
 
   ngOnInit() {
 
@@ -20,25 +23,38 @@ export class MenuComponent {
       {
         next: response => {
 
-          this.dataSource = response;
+          this.dtMenus = response;
 
-          for (let index = 0; index < this.dataSource.length; index++) {
-            const element = this.dataSource[index];
-
-            this.receta.searchRecipe(element.recetaId).subscribe({
-
-              next: (res) => {
-
-                this.dataSource[index].receta = res;
-
+          for (let index = 0; index < this.dtMenus.length; index++) {
+              if (this.dtMenus[index].estatus) {
+                  this.dataSource.push(this.dtMenus[index])
               }
-
-            })
           }
         },
-        error: error => console.log(error)
+        error: error => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error de Server',
+            text: 'Es necesario llamar al administrador del sistema',
+          });
+        }
       }
     );
+    
+    this.receta.showRecipes().subscribe({
+      next: (response) =>{
+        this.dtReceta = response
+      },
+      error: (error) =>{
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de Server',
+          text: 'Es necesario llamar ',
+        });
+      }
+    })
+
+
   }
 
   openInsertMenu() {
@@ -46,7 +62,7 @@ export class MenuComponent {
   }
 
   openEditarMenu(data: any) {
-    this.router.navigate([`/editarMenu/${data.id}`]);
+    this.router.navigate([`/editarMenu/${data.idMenu}`]);
   }
 
   eliminarMenu(id: number) {
@@ -60,14 +76,28 @@ export class MenuComponent {
       cancelButtonColor: '#d33',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.menu.deleteMenu(id).subscribe({
+
+        this.menu.obtenerMenu(id).subscribe({
           next: (res) => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Eliminacion',
-              text: 'Registro Eliminado con Exito',
-            });
-            window.location.reload();
+            this.dtMenuActualizar = res;
+            this.dtMenuActualizar.estatus = false;
+            this.menu.actualizarMenu( this.dtMenuActualizar).subscribe({
+              next: () => {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Eliminacion',
+                  text: 'Registro Eliminado con Exito',
+                });
+                window.location.reload();
+              },
+              error: (err) => {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error de Server',
+                  text: 'Es necesario llamar al administrador del sistema',
+                });
+              }
+            })
           },
           error: (err) => {
             Swal.fire({

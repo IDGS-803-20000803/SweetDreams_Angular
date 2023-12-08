@@ -1,0 +1,120 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-2">
+        <app-sidebar></app-sidebar>
+      </div>
+       
+      <div class="col-5">
+        <form class="form_main" >
+            <p class="heading">Agregar Compra</p>
+            <div class="row">
+                <div class="col-12">
+                  <div class="inputContainer">
+                    <label for="form-control"><b>Proveedor: </b></label>
+                    <select class="form-select" name="proveedorId" [(ngModel)]="regCompra.idProveedor" >
+                        <option *ngFor="let data of proveedores" [value]="data.idProveedor" >{{ data.razonSocial }}</option>
+                    </select>
+                  </div> 
+                </div>
+                <div class="col-12 my-2">
+                  <div class="inputContainer">
+                    <label for="form-control"><b>Método pago: </b></label>
+                    <select class="form-select" name="metodoPagoId" [(ngModel)]="regCompra.idMetodoPago" >
+                        <option *ngFor="let data of dtMetodoPago" [value]="data.idMetodoPago" >{{ data.metodoPago }}</option>
+                    </select>
+                  </div> 
+                </div>
+                <div class="col-8 my-2">
+                  <div class="inputContainer">
+                    <label for="form-control"><b>Total Compra: $</b></label>
+                      <input name="total" [(ngModel)]="regCompra.totalCompra"  class="inputField" type="text" disabled="true"  >
+                  </div>  
+              </div>
+            </div>
+            <div class="row">
+                <p class="heading">Detalle Compra</p>
+                <div class="col-12">
+                    <div class="inputContainer">
+                      <label for="form-control"><b>Ingrediente: </b></label>
+                        <select class="form-select" name="IngredienteId" [(ngModel)]="IngredienteId" (ngModelChange)="ObtenerUnidadIngrediente()">
+                            <option *ngFor="let data of dataIngredient" [value]="data.idIngrediente" >{{ data.nombre }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 my-2">
+                    <div class="inputContainer">
+                      <label for="form-control"><b>Unidad Medida: </b></label>
+                        <input name="unidadMedida" [(ngModel)]="unidadMedida"  class="inputField" type="text" disabled="true"  >
+                    </div>  
+                </div>
+                <div class="col-6" >
+                  <div class="inputContainer">
+                    <label for="form-control"><b *ngIf="unidadMedida !== 'Gramos'">Precio Unitario: $</b> <b *ngIf="unidadMedida == 'Gramos'">Precio Por Kilo $    </b></label>
+                      <input name="precio" [(ngModel)]="precio" placeholder="$00.00" class="inputField" type="text" >
+                  </div>
+              </div>
+                <div class="col-6">
+                    <div class="inputContainer">
+                      <label for="form-control"><b>Cantidad:   </b></label>
+                        <input name="cantidad" [(ngModel)]="cantidad" placeholder="Cantidad" class="inputField" type="text" >
+                    </div>
+                </div>
+                <div class="col-12">
+                  <div class="inputContainer">
+                    <label for="form-control"><b>Total Detalle: $</b></label>
+                      <input name="totalDetalles" [(ngModel)]="totalDetalles" placeholder="$00.00" class="inputField" type="text" disabled="true" >
+                  </div>
+              </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button id="button" (click)="addCompra()">Finalizar Compra</button>
+                </div>
+                <div class="col-6">
+                    <button id="button" (click)="agregarDetalle()" >Agregar Detalle</button>
+                </div>
+            </div>
+       
+        </form>
+    </div>
+
+    <div class="col-5 my-3">
+        <table class="table text-center">
+            <thead>
+              <tr>
+                <th>Ingrediente</th>
+                <th>Cantidad</th>
+                <th>UDS</th>
+                <th>Precio Unitario</th>
+                <th>Total</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of dtDetalleTemporal">
+                <td>
+                  <div *ngFor="let i of dataIngredient">
+                    <p *ngIf="data.idIngrediente == i.idIngrediente">{{ i.nombre }}</p>
+                  </div>
+                </td>
+                <td>{{ data.cantidad }}</td>
+                <td>
+                  <div >
+                    <p>{{ data.unidadMedida }}</p>
+                  </div>
+                </td>
+                <td>{{ data.precioUnitario | currency}}</td>
+                <td>{{ data.total | currency}}</td>
+                
+                <td>
+                  <button id="button" class="btn btn-danger m-1" (click)="eliminarDetalle(data.idIngrediente)" >
+                    ELIMINAR
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+    </div>
+  </div>

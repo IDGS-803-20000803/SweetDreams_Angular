@@ -1,7 +1,51 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-4">
-            <app-sidebar></app-sidebar>
+      <div class="col-2">
+        <app-sidebar></app-sidebar>
+      </div>
+      <div class="col-9">
+        <h1 class="text-center"><b>Ventas</b></h1>
+        <div>
+          <table class="table text-center">
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Metodo de Pago</th>
+                <th>Fecha Venta</th>
+                <th>Total Venta</th>
+                <th>Estatus</th>
+                <th>Detalles Venta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of pedidos">
+                <td>
+                  <div *ngFor="let client of clientes">
+                    <p *ngIf="data.idCliente == client.idCliente">{{client.nombres}}</p>
+                  </div>
+                </td>
+                <td>
+                  <div *ngFor="let met of dtMetodoPago">
+                    <p *ngIf="data.idMetodoPago == met.idMetodoPago">{{met.metodoPago}}</p>
+                  </div>
+                </td>
+                <td>{{data.fechaCreacion}}</td>
+                <td>{{data.total | currency}}</td>
+                <td>{{data.estatus}}</td>
+                <td>
+                  <button class="btn btn-info" (click)="openDetailWindow(data)">
+                    Ver
+                  </button>
+
+                  <button class="btn btn-primary" (click)="cambiarEstatus(data.idPedido)">
+                    Producir y Entregar
+                  </button>
+                </td>
+               
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
-</div>
+  </div>

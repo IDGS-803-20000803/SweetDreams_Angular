@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { InventarioService } from '../../inventario.service';
 import { Router } from '@angular/router';
 import { IngredienteServicesService } from '../../../ingrediente/services/ingrediente-services.service';
-import { UnidadesService } from '../../../unidades/unidades.service';
 import Swal from 'sweetalert2';
 import { Entrada } from 'src/app/interfaces/entrada';
 import { Inventario } from 'src/app/interfaces/inventario';
@@ -14,64 +13,80 @@ import { Inventario } from 'src/app/interfaces/inventario';
 })
 export class InsertEntradaComponent {
   constructor(private services:InventarioService, private router: Router, 
-    private ingredientes: IngredienteServicesService, private unidades:UnidadesService){}
+    private ingredientes: IngredienteServicesService){}
 
-    dtIngrediente:any = []
-    dtUnidades:any = []
+    dtIngrediente:any = [];
+    dtIngredientesActivos : any = [];
+    dtIngredienteSelect : any = [];
     
     dtInventario:any = []
     coincidencia : number = 0
     cantidad: number = 0
     idInventario:number = 0
+    unidadMedida :string = '';
+
     regEntrada: Entrada ={
-      id:0,
-      ingredienteId:0,
-      unidadMedidaId:0,
+      idEntrada:0,
+      idIngrediente:0,
+      unidadMedida:'',
       cantidad:0,
       fechaEntrada: new Date(),
-      userId:1,
+      idUsuario:1,
     }
      regInventario : Inventario = {
-      id:0,
-      ingredienteId:0,
-      unidadMedidaId:0,
+      idInventario:0,
+      idIngrediente:0,
+      unidadMedida:'',
       existenciaActual:0,
       existenciaInicial:0,
       fechaEntrada: new Date(),
       fechaModificacion: new Date(),
-      usuarioModificacion: 1,
-      userId:1
+      idUsuario:1
      }
 
   ngOnInit(): void {
     this.ingredientes.showIngredients().subscribe({
       next: (response) =>{
-        this.dtIngrediente = response
+       // this.dtIngrediente = response
+       this.dtIngredientesActivos = response
+       for (let index = 0; index < this.dtIngredientesActivos.length; index++) {
+          if (this.dtIngredientesActivos[index].estatus) {
+            this.dtIngrediente.push(this.dtIngredientesActivos[index])
+          }
+       }
       },
       error: (err) => {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `NO HAY DATOS EN LA BD: ${err}`,
+          text: `Es necesario llamar al administrador del sistema: ${err}`,
         });
       }
     });
-    this.unidades.showUnits().subscribe({
-      next:(res) =>{
-        this.dtUnidades = res
-      },
-      error: (err) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de Server',
-          text: `NO HAY DATOS EN LA BD: ${err}`,
-        });
-      }
-    })
+    
+  }
+
+  ObtenerUnidadIngrediente(){
+    if (this.regEntrada.idIngrediente !== 0){
+
+      this.ingredientes.searchIngredient(this.regEntrada.idIngrediente).subscribe({
+        next: (response) => {
+          this.dtIngredienteSelect = response;
+          this.unidadMedida = this.dtIngredienteSelect.unidadMedida;
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error de Server',
+            text: `Es necesario contactar al administrador del sistema: ${error}`,
+          });
+        },
+      });
+    }
   }
 
   AgregarEntrada(){
-    if(this.regEntrada.cantidad === 0 || this.regEntrada.ingredienteId === 0 || this.regEntrada.unidadMedidaId === 0){
+    if(this.regEntrada.cantidad === 0 || this.regEntrada.idIngrediente === 0 ){
       Swal.fire({
         icon: 'error',
         title: 'Campos Vacios',
@@ -79,14 +94,79 @@ export class InsertEntradaComponent {
       });
       return
     }
-    this.regInventario.ingredienteId = this.regEntrada.ingredienteId
-    this.regInventario.unidadMedidaId = this.regEntrada.unidadMedidaId
+    this.regInventario.idIngrediente = this.regEntrada.idIngrediente
     this.regInventario.existenciaInicial = this.regEntrada.cantidad
     this.regInventario.existenciaActual = this.regEntrada.cantidad
+    this.regInventario.unidadMedida = this.unidadMedida
 
+    this.regEntrada.unidadMedida = this.unidadMedida
     this.services.agregarEntrada(this.regEntrada).subscribe({
       next: () =>{
-        
+
+        this.services.getInventario().subscribe({
+          next:(response) =>{
+            this.dtInventario = response
+            console.log('Todo Inventario', this.dtInventario);
+            
+            this.dtInventario.forEach((inventario:any) =>{  
+              if( inventario.idIngrediente.toString() === this.regInventario.idIngrediente){
+                  console.log('Encontrado');
+                  
+                  this.coincidencia = 1
+                  this.cantidad = inventario.existenciaActual
+                  this.idInventario = inventario.idInventario
+                }
+            })
+            console.log('coincidencia', this.coincidencia);
+            if(this.coincidencia === 1){
+              this.regInventario.idInventario = this.idInventario
+              console.log('existencia actual antes', this.regInventario.existenciaActual);
+              
+              this.regInventario.existenciaActual = (parseInt( this.regInventario.existenciaActual.toString()) + this.cantidad)
+             
+              console.log('existencia actual despues', this.regInventario.existenciaActual);
+              
+              console.log('inventario', this.regInventario);
+              
+              this.services.actualizarInventario(this.regInventario).subscribe({
+                next: () =>{
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Insercion',
+                    text: 'Registro actualizado con Exito',
+                  });
+                  window.location.reload()
+                },
+                error: (err) => {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Insercion',
+                    text: `No se pudo actualizar la cantidad en inventario: ${err}`,
+                  });
+                }
+              })
+            }
+            else{
+              this.services.agregarInventario(this.regInventario).subscribe({
+                next: () =>{
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Insercion',
+                    text: 'Registro Registrado con Exito',
+                  });
+                  window.location.reload()
+                },
+                error: (err) => {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Insercion',
+                    text: `No se pudo registrar en inventario: ${err}`,
+                  });
+                }
+              });
+            }
+          }
+        });
       },
       error: (err) => {
         Swal.fire({
@@ -96,76 +176,7 @@ export class InsertEntradaComponent {
         });
       }
     });
-    console.log('Inventario', this.regInventario);
-    this.services.getInventario().subscribe({
-      next:(response) =>{
-        this.dtInventario = response
-        console.log('Todo Inventario', this.dtInventario);
-        
-        this.dtInventario.forEach((inventario:any) =>{
-          console.log('Dentro del ForEach', inventario);
-          console.log('INVENTARIO',inventario.ingredienteId);
-          console.log('inventario', this.regInventario.ingredienteId);
-          
-          if( inventario.ingredienteId.toString() === this.regInventario.ingredienteId){
-              console.log('Encontrado');
-              
-              this.coincidencia = 1
-              this.cantidad = inventario.existenciaActual
-              this.idInventario = inventario.id
-            }
-        })
-        console.log('coincidencia', this.coincidencia);
-        if(this.coincidencia === 1){
-          this.regInventario.id = this.idInventario
-          console.log('existencia actual antes', this.regInventario.existenciaActual);
-          
-          this.regInventario.existenciaActual = (parseInt( this.regInventario.existenciaActual.toString()) + this.cantidad)
-         
-          console.log('existencia actual despues', this.regInventario.existenciaActual);
-          
-          console.log('inventario', this.regInventario);
-          
-          this.services.actualizarInventario(this.regInventario).subscribe({
-            next: () =>{
-              Swal.fire({
-                icon: 'success',
-                title: 'Insercion',
-                text: 'Registro Registrado con Exito',
-              });
-              //window.location.reload()
-            },
-            error: (err) => {
-              Swal.fire({
-                icon: 'error',
-                title: 'Insercion',
-                text: `No se pudo registrar en inventario: ${err}`,
-              });
-            }
-          })
-        }
-        else{
-          this.services.agregarInventario(this.regInventario).subscribe({
-            next: () =>{
-              Swal.fire({
-                icon: 'success',
-                title: 'Insercion',
-                text: 'Registro Registrado con Exito',
-              });
-              //window.location.reload()
-            },
-            error: (err) => {
-              Swal.fire({
-                icon: 'error',
-                title: 'Insercion',
-                text: `No se pudo registrar en inventario: ${err}`,
-              });
-            }
-          });
-        }
-      }
-    });
     
-    //this.router.navigate(['/Entradas']);
+    this.router.navigate(['/Entradas']);
   }
 }

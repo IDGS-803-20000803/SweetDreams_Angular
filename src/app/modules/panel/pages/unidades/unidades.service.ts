@@ -10,25 +10,25 @@ export class UnidadesService {
   constructor(public http: HttpClient) {}
 
   showUnits() {
-    return this.http.get('http://192.168.100.51:7220/api/UnidadMedidums');
+    return this.http.get('http://10.16.14.95:7220/api/UnidadMedidums');
   }
 
   searchUnit(id: number) {
-    return this.http.get(`http://192.168.100.51:7220/api/UnidadMedidums/${id}`);
+    return this.http.get(`http://10.16.14.95:7220/api/UnidadMedidums/${id}`);
   }
 
   insertUnit(unit: UnidadesMedida) {
-    return this.http.post('http://192.168.100.51:7220/api/UnidadMedidums', unit);
+    return this.http.post('http://10.16.14.95:7220/api/UnidadMedidums', unit);
   }
 
   updateUnit(unit: UnidadesMedida) {
     return this.http.put(
-      `http://192.168.100.51:7220/api/UnidadMedidums/${unit.id}`,
+      `http://10.16.14.95:7220/api/UnidadMedidums/${unit.id}`,
       unit
     );
   }
 
   deleteUnit(id: number) {
-    return this.http.delete(`http://192.168.100.51:7220/api/UnidadMedidums/${id}`);
+    return this.http.delete(`http://10.16.14.95:7220/api/UnidadMedidums/${id}`);
   }
 }

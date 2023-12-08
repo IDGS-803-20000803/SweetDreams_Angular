@@ -15,10 +15,7 @@
                 <tr>
                     <th>Razon Social</th>
                     <th>RFC</th>
-                    <th>Alias</th>
-                    <th>Correo</th>
                     <th>Celular</th>
-                    <th>Ciudad</th>
                     <th>Calle</th>
                     <th>Colonia</th>
                     <th>Acciones</th>
@@ -27,17 +24,14 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let data of dataSource">
-                    <td *ngIf="data.baja === 0">{{ data.razonSocial }}</td>
-                    <td *ngIf="data.baja === 0">{{ data.rfc }}</td>
-                    <td *ngIf="data.baja === 0">{{ data.alias }}</td>
-                    <td *ngIf="data.baja === 0">{{ data.correo }}</td>
-                    <td *ngIf="data.baja === 0">{{ data.celular }}</td>
-                    <td *ngIf="data.baja === 0">{{ data.ciudad }}</td>
-                    <td *ngIf="data.baja === 0">{{ data.calle }}</td>
-                    <td *ngIf="data.baja === 0">{{ data.colonia }}</td>
-                    <td *ngIf="data.baja === 0">
+                    <td *ngIf="data.estatus">{{ data.razonSocial }}</td>
+                    <td *ngIf="data.estatus">{{ data.rfc }}</td>
+                    <td *ngIf="data.estatus">{{ data.celular }}</td>
+                    <td *ngIf="data.estatus">{{ data.calle }}</td>
+                    <td *ngIf="data.estatus">{{ data.colonia }}</td>
+                    <td *ngIf="data.estatus">
                     <button class="btn btn-warning" (click)="Editar(data)">Editar</button>
-                    <button class="btn btn-danger" (click)="Eliminar(data.id)" >Eliminar</button>
+                    <button class="btn btn-danger mx-2" (click)="Eliminar(data.idProveedor)" >Eliminar</button>
                     </td>
                 </tr>
                 </tbody>

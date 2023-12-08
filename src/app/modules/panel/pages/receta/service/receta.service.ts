@@ -10,25 +10,25 @@ export class RecetaService {
   constructor(public http: HttpClient) {}
 
   showRecipes() {
-    return this.http.get('http://192.168.100.51:7220/api/Recetums');
+    return this.http.get('http://localhost:8080/recetas');
   }
 
   searchRecipe(id: number) {
-    return this.http.get(`http://192.168.100.51:7220/api/Recetums/${id}`);
+    return this.http.get(`http://localhost:8080/recetas/${id}`);
   }
 
   insertRecipe(recipe: Receta) {
-    return this.http.post('http://192.168.100.51:7220/api/Recetums', recipe);
+    return this.http.post('http://localhost:8080/recetas', recipe);
   }
 
   updateRecipe(recipe: Receta) {
     return this.http.put(
-      `http://192.168.100.51:7220/api/Recetums/${recipe.id}`,
+      `http://localhost:8080/recetas/${recipe.idReceta}`,
       recipe
     );
   }
 
   deleteRecipe(id: number) {
-    return this.http.delete(`http://192.168.100.51:7220/api/Recetums/${id}`);
+    return this.http.delete(`http://localhost:8080/recetas/${id}`);
   }
 }

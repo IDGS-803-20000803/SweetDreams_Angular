@@ -6,15 +6,19 @@
         <div class="col-8">
             <form class="form_main" (ngSubmit)="agregarMenu()">
                 <p class="heading">Agregar Menu</p>
+                <img src="{{ regMenu.foto }}" alt="" width="100px" height="100px">
+                <br>
                 <div class="inputContainer">
-                    <select class="form-select" name="recetaControl" [(ngModel)]="regMenu.recetaId">
-                      <option *ngFor="let receta of recetas" [value]="receta.id"> {{ receta.receta }}</option>
+                    <select class="form-select" name="idReceta" [(ngModel)]="regMenu.idReceta">
+                      <option *ngFor="let receta of recetas" [value]="receta.idReceta"> {{ receta.nombreReceta }}</option>
                     </select>
                 </div>  
-                <div class="inputContainer">
+                <div class="inputContainer my-2">
+                    <label for="form-control"><b>Seleccionar Imagen</b></label>
                     <input type="file" class="form-control" accept="image/*" id="inputFile" name="foto"/>
                 </div>  
-                <div class="inputContainer">
+                <div class="inputContainer my-2">
+                    <label for="form-control"><b>Precio: </b></label>
                     <input type="text" class="form-control" name="costo" [(ngModel)]="regMenu.costo" placeholder="$ Costo"/>
                 </div> 
             <button id="button">Agregar</button>

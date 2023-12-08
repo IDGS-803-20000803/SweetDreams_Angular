@@ -9,17 +9,14 @@
                 <div class="inputContainer">
                     <label for="form-control"><b>Ingrediente:</b></label>
                     <br>
-                    <select class="form-select" name="entrada" [(ngModel)]="regEntrada.ingredienteId">
-                      <option *ngFor="let data of dtIngrediente" [value]="data.id"> {{ data.ingrediente1 }}</option>
+                    <select class="form-select" name="entrada" [(ngModel)]="regEntrada.idIngrediente" (ngModelChange)="ObtenerUnidadIngrediente()">
+                      <option *ngFor="let data of dtIngrediente" [value]="data.idIngrediente"> {{ data.nombre }}</option>
                     </select>
                 </div>  
                 <br>
                 <div class="inputContainer">
                     <label for="form-control"><b>Unidad:</b></label>
-                    <br>
-                    <select class="form-select" name="entrada" [(ngModel)]="regEntrada.unidadMedidaId">
-                      <option *ngFor="let data of dtUnidades" [value]="data.id"> {{ data.unidad }}</option>
-                    </select>
+                    <input name="unidadMedida" [(ngModel)]="unidadMedida"  class="inputField" type="text" disabled="true"  >
                 </div>  
                 <div class="inputContainer">
                     <label for="form-control"><b>Cantidad:</b></label>

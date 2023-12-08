@@ -13,26 +13,43 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 export class InsertMenuComponent {
   constructor(public menu: MenuService, private router: Router, private receta: RecetaService) { }
 
+  dtMenus: any = [];
+  dtMenusActivos : any = [];
   recetas: any = [];
+  recetasActivas : any = [];
+  recetasUtilizadas : any = [];
+  coincidencia :number = 0;
 
   regMenu: Menu = {
-    id: 0,
-    recetaId: 0,
+    idMenu: 0,
+    idReceta: 0,
     foto: '',
     costo: 0,
-    baja: 0,
-    fecha_creacion: new Date(),
-    fecha_modificacion: new Date(),
-    usuario_modificacion: 1,
+    estatus: true,
+    quantity: 0,
   }
+
+
 
   ngOnInit(): void {
 
     this.receta.showRecipes().subscribe({
-
       next: (res) => {
-
-        this.recetas = res;
+        //this.recetas = res;
+        this.recetasActivas = res;
+        for (let index = 0; index < this.recetasActivas.length; index++) {
+         if (this.recetasActivas[index].estatus) {
+            this.recetas.push(this.recetasActivas[index])
+         }
+          
+        }
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de Server',
+          text: `Ocurrio un error en el servidor : ${error}`,
+        });
       }
 
     });
@@ -70,21 +87,65 @@ export class InsertMenuComponent {
   }
 
   agregarMenu() {
-    this.menu.agregarMenu(this.regMenu).subscribe({
+    this.recetasUtilizadas = this.regMenu.idReceta
+    this.menu.getMenu().subscribe({
+      next: (response) =>{
+        this.dtMenusActivos = response
 
-      next: (res) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Insercion',
-          text: 'Registro Registrado con Exito',
-        });
-        window.location.reload()
+        for (let index = 0; index < this.dtMenusActivos.length; index++) {
+          if (this.dtMenusActivos[index].estatus) {
+
+            this.dtMenus.push(this.dtMenusActivos[index])
+          }
+          
+        }
+        for (let i = 0; i < this.dtMenus.length; i++) {
+         
+          if (this.dtMenus[i].idReceta == this.recetasUtilizadas) {
+            this.coincidencia = 1
+          }
+        }
+
+        if (this.coincidencia == 1) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error de Server',
+            text: `No puedes agregar mas de un menu con la misma receta`,
+          });
+          return
+        }
+        else{
+          this.menu.agregarMenu(this.regMenu).subscribe({
+
+            next: (res) => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Insercion',
+                text: 'Registro Registrado con Exito',
+              });
+              window.location.reload()
+            },
+            error: (error) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error de Server',
+                text: `Ocurrio un error en el servidor : ${error}`,
+              });
+            }
+          });
+          this.router.navigate(['/menu']);
+        }
       },
-      error: (err) => {
-        console.log(err);
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de Server',
+          text: `Ocurrio un error en el servidor : ${error}`,
+        });
       }
     });
-    this.router.navigate(['/menu']);
+
+   
   }
 
   imageToBase64(file: File): Promise<string> {

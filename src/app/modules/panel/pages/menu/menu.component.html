@@ -20,12 +20,16 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of dataSource">
-                  <td ><img src="{{ data.foto }}" alt="" width="100px" height="100px"></td>
-                  <td>{{ data.receta.descripcion }}</td>
-                  <td>{{ data.costo | currency}}</td>
-                    <td>
+                  <td *ngIf="data.estatus"><img src="{{ data.foto }}" alt="" width="100px" height="100px" style="border-radius: 30%;"></td>
+                  <td *ngIf="data.estatus">
+                    <div *ngFor="let dt of dtReceta">
+                      <p *ngIf="dt.idReceta == data.idReceta">{{ dt.nombreReceta }}</p>
+                    </div>
+                  </td>
+                  <td *ngIf="data.estatus">{{ data.costo | currency}}</td>
+                    <td *ngIf="data.estatus">
                     <button class="btn btn-warning m-3" (click)="openEditarMenu(data)">Editar</button>
-                    <button class="btn btn-danger" (click)="eliminarMenu(data.id)">Eliminar</button>
+                    <button class="btn btn-danger" (click)="eliminarMenu(data.idMenu)">Eliminar</button>
                     </td>
                   </tr>
                 </tbody>

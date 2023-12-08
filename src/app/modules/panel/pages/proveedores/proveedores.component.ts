@@ -29,40 +29,59 @@ export class ProveedoresComponent {
     this.router.navigate(['/insertProveedor']);
   }
   Editar(data:any){
-    this.router.navigate([`/editProveedor/${data.id}`]);
+    this.router.navigate([`/editProveedor/${data.idProveedor}`]);
   }
   Eliminar(id:number){
-    this.service.obtenerProveedor(id).subscribe({
-      next: (response) => {
-        this.dtProveedores = response;
-        this.dtProveedores.baja = 1
-        this.service.actualizarProveedor(this.dtProveedores).subscribe({
-          next: () => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Eliminacion',
-              text: 'Registro Eliminado con Exito',
+    Swal.fire({
+      title: "¿Estas Seguro de eliminar el proveedor?",
+      text: "Esta Accion no puede revertirse",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, Borrarlo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Borrado!",
+          text: "El proveedor ha sido borrado.",
+          icon: "success"
+        });
+        this.service.obtenerProveedor(id).subscribe({
+          next: (response) => {
+            this.dtProveedores = response;
+            this.dtProveedores.estatus = false;
+            this.service.actualizarProveedor(this.dtProveedores).subscribe({
+              next: () => {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Eliminacion',
+                  text: 'Registro Eliminado con Exito',
+                });
+                window.location.reload();
+              },
+              error: (error) => {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error de Server',
+                  text: `Es necesario llamar al administrador del sistema: ${error}`,
+                });
+              },
             });
-            window.location.reload();
+    
           },
           error: (error) => {
             Swal.fire({
               icon: 'error',
               title: 'Error de Server',
-              text: `NO HAY DATOS EN LA BD: ${error}`,
+              text: `Es necesario llamar al administrador del sistema:${error}`,
             });
           },
         });
-
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de Server',
-          text: `NO HAY DATOS EN LA BD: ${error}`,
-        });
-      },
+    
+      }
     });
+    
   }
 
 }

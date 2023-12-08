@@ -13,27 +13,23 @@
                     <thead>
                       <tr>
                         <th>Nombres</th>
-                        <th>RFC</th>
-                        <th>CURP</th>
+                        <th>Apellidos</th>
                         <th>Celular</th>
                         <th>Calle</th>
                         <th>Colonia</th>
-                        <th>Foto</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr *ngFor="let data of dataSource">
-                        <td *ngIf="data.baja === 0">{{ data.nombres }}</td>
-                        <td *ngIf="data.baja === 0">{{ data.rfc }}</td>
-                        <td *ngIf="data.baja === 0">{{ data.curp }}</td>
-                        <td *ngIf="data.baja === 0">{{ data.celular }}</td>
-                        <td *ngIf="data.baja === 0">{{ data.calle }}</td>
-                        <td *ngIf="data.baja === 0">{{data.colonia}}</td>
-                        <td *ngIf="data.baja === 0"><img src="{{ data.fotoEmpleado }}" alt="" width="50px" height="50px"></td>
-                        <td *ngIf="data.baja === 0">
+                        <td *ngIf="data.estatus">{{ data.nombres }}</td>
+                        <td *ngIf="data.estatus">{{ data.apellidos }}</td>
+                        <td *ngIf="data.estatus">{{ data.celular }}</td>
+                        <td *ngIf="data.estatus">{{ data.calle }}</td>
+                        <td *ngIf="data.estatus">{{data.colonia}}</td>
+                        <td *ngIf="data.estatus">
                           <button class="btn btn-warning m-1" (click)="openEditWindow(data)">EDITAR</button>
-                          <button class="btn btn-danger m-1" (click)="dropEmpleado(data.id)">ELIMINAR</button>
+                          <button class="btn btn-danger m-1" (click)="dropEmpleado(data.idEmpleado)">ELIMINAR</button>
                         </td>
                       </tr>
                     </tbody>

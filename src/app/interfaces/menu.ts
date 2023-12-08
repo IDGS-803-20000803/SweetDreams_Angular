@@ -1,10 +1,8 @@
 export interface Menu {
-    id:number,
-    recetaId:number,
+    idMenu:number,
+    idReceta:number,
     foto:string,
     costo:number,
-    baja:number,
-    fecha_creacion:Date,
-    fecha_modificacion:Date,
-    usuario_modificacion:number,
+    estatus:boolean,
+    quantity:number
   }

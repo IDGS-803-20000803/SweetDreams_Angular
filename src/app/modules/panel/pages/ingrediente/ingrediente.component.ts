@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { IngredienteServicesService } from './services/ingrediente-services.service';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
-import { UnidadesService } from '../unidades/unidades.service';
+
 
 
 @Component({
@@ -11,10 +11,10 @@ import { UnidadesService } from '../unidades/unidades.service';
   styleUrls: ['./ingrediente.component.css']
 })
 export class IngredienteComponent {
-  constructor(public service: IngredienteServicesService, private router: Router, public serviceUnit: UnidadesService ) {}
+  constructor(public service: IngredienteServicesService, private router: Router) {}
   
   dataSource: any = [];
-  dataUnit: any = [];
+  dtIngredientes: any = [];
 
   ngOnInit(): void {
     this.service.showIngredients().subscribe({
@@ -25,20 +25,7 @@ export class IngredienteComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `ERROR AL ELIMINAR EL REGISTRO DE LA BD: ${error}`,
-        });
-      },
-    });
-
-    this.serviceUnit.showUnits().subscribe({
-      next: (response) => {
-        this.dataUnit = response;
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de Server',
-          text: `ERROR AL ELIMINAR EL REGISTRO DE LA BD: ${error}`,
+          text: `Es necesario llamar al administrador del sistema: ${error}`,
         });
       },
     });
@@ -49,27 +36,60 @@ export class IngredienteComponent {
   }
 
   openEditWindow(data: any) {
-    this.router.navigate([`/editIngredientes/${data.id}`]);
+    this.router.navigate([`/editIngredientes/${data.idIngrediente}`]);
   }
 
   dropIngredient(id: number) {
-    this.service.deleteIngredient(id).subscribe({
-      next: () => {
+    Swal.fire({
+      title: "¿Estas Seguro de eliminar el ingrediente?",
+      text: "Esta Accion no puede revertirse",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, Borrarlo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
         Swal.fire({
-          icon: 'success',
-          title: 'Eliminación',
-          text: 'Registro Eliminado con Exito',
+          title: "Borrado!",
+          text: "El ingrediente ha sido borrado.",
+          icon: "success"
         });
-        window.location.reload();
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de Server',
-          text: `ERROR AL ELIMINAR EL REGISTRO DE LA BD: ${error}`,
+        this.service.searchIngredient(id).subscribe({
+          next: (response) => {
+            this.dtIngredientes = response;
+            this.dtIngredientes.estatus = false;
+            this.service.updateIngredient(this.dtIngredientes).subscribe({
+              next: () => {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Eliminación',
+                  text: 'Registro Eliminado con Exito',
+                });
+                window.location.reload();
+              },
+              error: (error) => {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error de Server',
+                  text: `Es necesario llamar al administrador del sistema: ${error}`,
+                });
+              },
+            });
+          },
+          error: (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error de Server',
+              text: `Es necesario contactar al administrador del sistema: ${error}`,
+            });
+          },
         });
-      },
+
+        
+      }
     });
+    
   }
   
 }

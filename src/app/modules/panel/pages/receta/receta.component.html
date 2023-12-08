@@ -14,20 +14,16 @@
       <table class="table text-center">
         <thead>
           <tr>
-            <th>NOMBRE</th>
-            <th>DESCRIPCIÓN</th>
-            <th>DURACIÓN</th>
-            <th>CREACIÓN</th>
-            <th>ACCIONES</th>
+            <th>Nombre Receta</th>
+            <th>Tiempo Preparación</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let data of dataSource">
-            <td>{{ data.receta }}</td>
-            <td>{{ data.descripcion }}</td>
-            <td>{{ data.duracion }}</td>
-            <td>{{ data.fechaCreacion }}</td>
-            <td>
+            <td *ngIf="data.estatus">{{ data.nombreReceta }}</td>
+            <td *ngIf="data.estatus">{{ data.tiempoDuracion }} Minutos</td>
+            <td *ngIf="data.estatus">
               <button
                 class="btn btn-warning m-1"
                 (click)="openEditWindow(data)"
@@ -37,7 +33,7 @@
               <button class="btn btn-info" (click)="openDetailWindow(data)">
                 DETALLE
               </button>
-              <button class="btn btn-danger m-1" (click)="dropRecipe(data.id)">
+              <button class="btn btn-danger m-1" (click)="dropRecipe(data.idReceta)">
                 ELIMINAR
               </button>
               

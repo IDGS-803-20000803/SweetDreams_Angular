@@ -12,29 +12,21 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 export class InsertarProveedorComponent {
 
   regProveedor: Proveedor = {
-    id: 0,
-    razonSocial: "",
+    idProveedor: 0,
+    razonSocial: '',
     rfc: '',
-    alias: '',
-    baja: 0,
-    correo: '',
+    estatus: true,
     celular: '',
-    ciudad: '',
-    estado: '',
     codigoPostal: '',
     calle: '',
-    colonia: '',
-    fechaCreacion: new Date(),
-    fechaModificiacion: new Date(),
-    usuarioModificacion: 1
+    colonia: ''
   }
   constructor(private proveedor: ProveedorService, private router: Router) { }
 
   Agregar() {
     if(this.regProveedor.razonSocial === ""|| this.regProveedor.rfc === ""
-    || this.regProveedor.alias === "" || this.regProveedor.correo === ""
-    || this.regProveedor.celular === "" || this.regProveedor.ciudad === ""
-    || this.regProveedor.estado === "" || this.regProveedor.codigoPostal === ""
+    || this.regProveedor.celular === "" 
+    || this.regProveedor.codigoPostal === ""
     || this.regProveedor.calle === "" || this.regProveedor.colonia === ""
     ){
       Swal.fire({
@@ -49,8 +41,8 @@ export class InsertarProveedorComponent {
       next: (res) => {
         Swal.fire({
           icon: 'success',
-          title: 'Insersion',
-          text: 'Registro Ingresado con Exito',
+          title: 'Inserción',
+          text: 'Registro insertado con exito',
         });
         window.location.reload();
       },
@@ -58,7 +50,7 @@ export class InsertarProveedorComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `NO HAY DATOS EN LA BD: ${err}`,
+          text: `Es necesario llamar al administrado del sistema: ${err}`,
         });
       }
     });

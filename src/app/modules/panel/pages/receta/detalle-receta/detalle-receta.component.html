@@ -13,33 +13,33 @@
                 <tr>
                     <th>INGREDIENTE</th>
                     <th>CANTIDAD</th>
-                    <th>INSTRUCCIONES</th>
                     <th>UDS</th>
+                    <th>INSTRUCCIONES</th>
                     <th>RECETA</th>
                     <th>ACCIONES</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let data of dataSource">
-                    <td>
+                    <td *ngIf="data.estatus">
                     <div *ngFor="let i of dataIngredient">
-                        <p *ngIf="data.ingredienteId == i.id">{{ i.ingrediente1 }}</p>
+                        <p *ngIf="data.idIngrediente == i.idIngrediente">{{ i.nombre }}</p>
                     </div>
                     </td>
-                    <td>{{ data.cantidad }}</td>
-                    <td>{{ data.instruccion }}</td>
-                    <td>
-                    <div *ngFor="let u of dataUnit">
-                        <p *ngIf="data.unidadMedidaId == u.id">{{ u.unidad }}</p>
+                    <td *ngIf="data.estatus">{{ data.cantidad }}</td>
+                    <td *ngIf="data.estatus">
+                    <div *ngFor="let i of dataIngredient">
+                        <p *ngIf="data.idIngrediente == i.idIngrediente">{{ i.unidadMedida }}</p>
                     </div>
                     </td>
-                    <td>
+                    <td *ngIf="data.estatus">{{ data.descripcion }}</td>
+                    <td *ngIf="data.estatus">
                     <div *ngFor="let r of dataReceta">
-                        <p *ngIf="data.recetaId == r.id">{{ r.receta }}</p>
+                        <p *ngIf="data.idReceta == r.idReceta">{{ r.nombreReceta }}</p>
                     </div>
                     </td>
-                    <td>
-                    <button class="btn btn-danger m-1" (click)="dropDetail(data.id)">
+                    <td *ngIf="data.estatus">
+                    <button class="btn btn-danger m-1" (click)="dropDetail(data.idDetalleReceta)">
                         ELIMINAR
                     </button>
                     </td>

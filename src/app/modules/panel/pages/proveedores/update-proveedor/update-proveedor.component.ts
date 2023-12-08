@@ -20,7 +20,7 @@ export class UpdateProveedorComponent {
 
   ngOnInit(): void {
     this.recover.paramMap.subscribe((params) => {
-      const idParam = params.get('id');
+      const idParam = params.get('idProveedor');
       if (idParam) {
         this.id = Number(idParam);
       } else {
@@ -36,7 +36,7 @@ export class UpdateProveedorComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `NO HAY DATOS EN LA BD: ${error}`,
+          text: `Es necesario llamar al administrador del sistema: ${error}`,
         });
       },
     });
@@ -56,7 +56,7 @@ export class UpdateProveedorComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `NO HAY DATOS EN LA BD: ${error}`,
+          text: `Es necesario llamar al administrador del sistema: ${error}`,
         });
       },
     });

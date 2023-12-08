@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IngredienteServicesService } from '../services/ingrediente-services.service';
-import { UnidadesService } from '../../unidades/unidades.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 
@@ -12,7 +11,6 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 export class ActualizarIngredienteComponent {
   constructor(
     private service: IngredienteServicesService,
-    private serviceUnit: UnidadesService,
     private router: Router,
     private recover: ActivatedRoute 
   ) {}
@@ -23,7 +21,7 @@ export class ActualizarIngredienteComponent {
 
   ngOnInit(): void {
     this.recover.paramMap.subscribe((params) => {
-      const idParam = params.get('id');
+      const idParam = params.get('idIngrediente');
       if (idParam) {
         this.id = Number(idParam);
       } else {
@@ -39,23 +37,12 @@ export class ActualizarIngredienteComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `ERROR AL ELIMINAR EL REGISTRO DE LA BD: ${error}`,
+          text: `Es necesario contactar al administrador del sistema: ${error}`,
         });
       },
     });
 
-    this.serviceUnit.showUnits().subscribe({
-      next: (response) => {
-        this.dataUnit = response;
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de Server',
-          text: `ERROR AL ELIMINAR EL REGISTRO DE LA BD: ${error}`,
-        });
-      },
-    });
+    
   }
 
   editIngredient() {
@@ -72,7 +59,7 @@ export class ActualizarIngredienteComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `ERROR AL Actualizar EL REGISTRO DE LA BD: ${error}`,
+          text: `Es necesario contactar al administrador del sistema: ${error}`,
         });
       },
     });

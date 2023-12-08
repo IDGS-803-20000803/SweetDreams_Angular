@@ -10,24 +10,24 @@ export class DetalleService {
   constructor(public http: HttpClient) { }
 
   showDetail() {
-    return this.http.get('http://192.168.100.51:7220/api/DetalleRecetums');
+    return this.http.get('http://localhost:8080/detalleRecetas');
   }
 
   searchDetail(id: number) {
-    return this.http.get(`http://192.168.100.51:7220/api/DetalleRecetums/${id}`);
+    return this.http.get(`http://localhost:8080/detalleRecetas/${id}`);
   }
 
   insertDetail(detail: DetalleReceta) {
-    return this.http.post('http://192.168.100.51:7220/api/DetalleRecetums', detail);
+    return this.http.post('http://localhost:8080/detalleRecetas', detail);
   }
 
   updateDetail(detail: DetalleReceta) {
     return this.http.put(
-      `http://192.168.100.51:7220/api/DetalleRecetums/${detail.id}`,detail
+      `http://localhost:8080/detalleRecetas/${detail.idDetalleReceta}`,detail
     );
   }
 
   deleteDetail(id: number) {
-    return this.http.delete(`http://192.168.100.51:7220/api/DetalleRecetums/${id}`);
+    return this.http.delete(`http://localhost:8080/detalleRecetas/${id}`);
   }
 }

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ClienteService } from '../cliente.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
-import { DepartamentoServicesService } from '../../departamentos/departamento-services.service';
 
 @Component({
   selector: 'app-actualizar-cliente',
@@ -11,7 +10,7 @@ import { DepartamentoServicesService } from '../../departamentos/departamento-se
 })
 export class ActualizarClienteComponent {
   constructor(
-    private service: ClienteService, private depart: DepartamentoServicesService,
+    private service: ClienteService,
     private router: Router,
     private recover: ActivatedRoute 
   ) {}
@@ -20,16 +19,17 @@ export class ActualizarClienteComponent {
   actCliente: any = {};
   actUsuario: any = {};
   idUser: number = 0
-  dataDepart: any = [];
+  
 
   ngOnInit(): void {
     this.recover.paramMap.subscribe((params) => {
-      const idParam = params.get('id');
+      const idParam = params.get('idCliente');
       if (idParam) {
         this.id = Number(idParam);
       } else {
         this.id = 0;
       }
+      
     });
 
     
@@ -38,7 +38,7 @@ export class ActualizarClienteComponent {
       next: (response) => {
         this.actCliente = response;
         console.log('Datos Cliente', this.actCliente);
-        this.idUser = this.actCliente.userId
+        this.idUser = this.actCliente.idUsuario;
         console.log('Id Usuario:', this.idUser);
 
         this.service.obtenerUsuario(this.idUser).subscribe({
@@ -67,7 +67,7 @@ export class ActualizarClienteComponent {
   }
 
   ActualizarCliente(){
-    this.actCliente.nombres = this.actUsuario.name
+    this.actCliente.nombres = this.actUsuario.nombre
     console.log('Datos del cliente', this.actCliente);
     
     this.service.actualizarCliente(this.actCliente).subscribe({
@@ -79,7 +79,7 @@ export class ActualizarClienteComponent {
               title: 'Actualizacion',
               text: 'Registro Actualizado con Exito',
             });
-            window.location.reload();
+          window.location.reload();
           },
           error: (error) => {
             Swal.fire({

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { InventarioService } from '../inventario.service';
 import { IngredienteServicesService } from '../../ingrediente/services/ingrediente-services.service';
-import { UnidadesService } from '../../unidades/unidades.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -12,12 +11,13 @@ import Swal from 'sweetalert2';
 })
 export class SalidasComponent {
 
-  dataSource:any = []
-  dtIngredientes:any = []
-  dtUnidades: any =[]
+  dataSource:any = [];
+  dtIngredientes:any = [];
+  
+
 
   constructor(private services: InventarioService, private router: Router,
-    private IngredienteS:IngredienteServicesService, private unidadS: UnidadesService){}
+    private IngredienteS:IngredienteServicesService){}
 
     ngOnInit() {
       this.services.getSalidas().subscribe({
@@ -32,6 +32,7 @@ export class SalidasComponent {
           });
         },
       });
+
       this.IngredienteS.showIngredients().subscribe({
         next: (response) => {
           this.dtIngredientes = response;
@@ -45,18 +46,7 @@ export class SalidasComponent {
         },
       });
   
-      this.unidadS.showUnits().subscribe({
-        next: (response) => {
-          this.dtUnidades = response;
-        },
-        error: (error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error de Server',
-            text: `Error al consultar unidades medida: ${error}`,
-          });
-        },
-      });
+      
     }
 
     Agregar(){

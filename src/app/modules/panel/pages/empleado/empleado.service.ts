@@ -13,39 +13,39 @@ export class EmpleadoService {
   constructor(private http: HttpClient){}
 
   AsignarRolEmpleado(datos:rolUser){
-    return this.http.post('http://192.168.100.51:7220/api/RolesUsers',datos)
+    return this.http.post('http://localhost:8080/rolesusuarios',datos)
   }
 
   public getEmpleados():Observable<Empleado[]>{
-    return this.http.get<Empleado[]>("http://192.168.100.51:7220/api/Empleadoes");
+    return this.http.get<Empleado[]>("http://localhost:8080/empleados");
   }
 
   public obtenerEmpleado(id:number){
-    return this.http.get(`http://192.168.100.51:7220/api/Empleadoes/${id}`);
+    return this.http.get(`http://localhost:8080/empleados/${id}`);
   }
 
 AgregarUsuario(datos:Usuario){
-  return this.http.post('http://192.168.100.51:7220/api/Usuarios',datos)
+  return this.http.post('http://localhost:8080/usuarios',datos)
 }
 
 public getUsuarios():Observable<Usuario[]>{
-  return this.http.get<Usuario[]>("http://192.168.100.51:7220/api/Usuarios");
+  return this.http.get<Usuario[]>("http://localhost:8080/usuarios");
 }
 
 public obtenerUsuario(id:number){
-  return this.http.get(`http://192.168.100.51:7220/api/Usuarios/${id}`);
+  return this.http.get(`http://localhost:8080/usuarios/${id}`);
 }
 public ActualizarUser(datos:Usuario){
-  return this.http.put(`http://192.168.100.51:7220/api/Usuarios/${datos.id}`,datos);
+  return this.http.put(`http://localhost:8080/usuarios/${datos.idUsuario}`,datos);
 }
 
 public actualizarEmpleado(datos:Empleado){
-  return this.http.put(`http://192.168.100.51:7220/api/Empleadoes/${datos.id}`,
+  return this.http.put(`http://localhost:8080/empleados/${datos.idEmpleado}`,
   datos)
 }
 
 AgregarEmpleado(datos:Empleado){
-  return this.http.post('http://192.168.100.51:7220/api/Empleadoes',datos)
+  return this.http.post('http://localhost:8080/empleados',datos)
 }
 
 }

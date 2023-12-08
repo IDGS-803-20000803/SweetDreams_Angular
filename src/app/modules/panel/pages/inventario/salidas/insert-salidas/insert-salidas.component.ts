@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { InventarioService } from '../../inventario.service';
 import { Router } from '@angular/router';
 import { IngredienteServicesService } from '../../../ingrediente/services/ingrediente-services.service';
-import { UnidadesService } from '../../../unidades/unidades.service';
 import { Salida } from 'src/app/interfaces/salida';
 import Swal from 'sweetalert2';
 import { Inventario } from 'src/app/interfaces/inventario';
@@ -15,66 +14,83 @@ import { Inventario } from 'src/app/interfaces/inventario';
 export class InsertSalidasComponent {
 
   constructor(private services:InventarioService, private router: Router, 
-    private ingredientes: IngredienteServicesService, private unidades:UnidadesService){}
+    private ingredientes: IngredienteServicesService){}
 
-    dtIngrediente:any = []
-    dtUnidades:any = []
+    dtIngrediente:any = [];
+    dtIngredientesActivos : any = [];
+    dtIngredienteSelect : any = [];
 
     dtInventario:any = []
     coincidencia : number = 0
     cantidad: number = 0
     idInventario:number = 0
+    unidadMedida :string = '';
 
     regSalida: Salida ={
-      id:0,
-      ingredienteId:0,
-      unidadMedidaId:0,
+      idSalida:0,
+      idIngrediente:0,
+      unidadMedida:'',
       cantidad:0,
       fechaSalida: new Date(),
-      userId:1,
+      idUsuario:1,
     }
 
     regInventario : Inventario = {
-      id:0,
-      ingredienteId:0,
-      unidadMedidaId:0,
+      idInventario:0,
+      idIngrediente:0,
+      unidadMedida:'',
       existenciaActual:0,
       existenciaInicial:0,
       fechaEntrada: new Date(),
       fechaModificacion: new Date(),
-      usuarioModificacion: 1,
-      userId:1
+      idUsuario:1
      }
 
     ngOnInit(): void {
+      
       this.ingredientes.showIngredients().subscribe({
         next: (response) =>{
-          this.dtIngrediente = response
+         // this.dtIngrediente = response
+         this.dtIngredientesActivos = response
+         for (let index = 0; index < this.dtIngredientesActivos.length; index++) {
+            if (this.dtIngredientesActivos[index].estatus) {
+              this.dtIngrediente.push(this.dtIngredientesActivos[index])
+            }
+         }
         },
         error: (err) => {
           Swal.fire({
             icon: 'error',
             title: 'Error de Server',
-            text: `NO HAY DATOS EN LA BD: ${err}`,
+            text: `Es necesario llamar al administrador del sistema: ${err}`,
           });
         }
       });
-      this.unidades.showUnits().subscribe({
-        next:(res) =>{
-          this.dtUnidades = res
-        },
-        error: (err) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error de Server',
-            text: `NO HAY DATOS EN LA BD: ${err}`,
-          });
-        }
-      })
+      
+    }
+
+    ObtenerUnidadIngrediente(){
+      if (this.regSalida.idIngrediente !== 0){
+  
+        this.ingredientes.searchIngredient(this.regSalida.idIngrediente).subscribe({
+          next: (response) => {
+            this.dtIngredienteSelect = response;
+            this.unidadMedida = this.dtIngredienteSelect.unidadMedida;
+          },
+          error: (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error de Server',
+              text: `Es necesario contactar al administrador del sistema: ${error}`,
+            });
+          },
+        });
+      }
     }
 
     AgregarSalida(){
-      if(this.regSalida.cantidad === 0 || this.regSalida.ingredienteId === 0 || this.regSalida.unidadMedidaId === 0){
+      this.regSalida.unidadMedida = this.unidadMedida 
+      if(this.regSalida.cantidad === 0 || this.regSalida.idIngrediente === 0){
         Swal.fire({
           icon: 'error',
           title: 'Campos Vacios',
@@ -82,9 +98,7 @@ export class InsertSalidasComponent {
         });
         return
       }
-      this.regInventario.ingredienteId = this.regSalida.ingredienteId
-      this.regInventario.unidadMedidaId = this.regSalida.unidadMedidaId
-    
+      this.regInventario.idIngrediente = this.regSalida.idIngrediente
       
       this.services.getInventario().subscribe({
         next:(response) =>{
@@ -93,12 +107,12 @@ export class InsertSalidasComponent {
           this.dtInventario.forEach((inventario:any) =>{
            
             
-            if( inventario.ingredienteId.toString() === this.regInventario.ingredienteId){
+            if( inventario.idIngrediente.toString() === this.regInventario.idIngrediente){
                 console.log('Encontrado');
                 
                 this.coincidencia = 1
                 this.cantidad = inventario.existenciaActual
-                this.idInventario = inventario.id
+                this.idInventario = inventario.idInventario
                 this.regInventario.existenciaInicial = inventario.existenciaInicial
                 this.regInventario.existenciaActual = inventario.existenciaActual
 
@@ -113,7 +127,7 @@ export class InsertSalidasComponent {
 
           console.log('coincidencia', this.coincidencia);
         if(this.coincidencia === 1){
-          this.regInventario.id = this.idInventario
+          this.regInventario.idInventario = this.idInventario
 
           console.log('existencia actual antes', this.regInventario.existenciaActual);
 
@@ -121,7 +135,7 @@ export class InsertSalidasComponent {
           console.log('existencia actual despues', this.regInventario.existenciaActual);
           
           console.log('inventario', this.regInventario);
-
+          this.regInventario.unidadMedida = this.unidadMedida
           this.services.actualizarInventario(this.regInventario).subscribe({
             next: () =>{
 

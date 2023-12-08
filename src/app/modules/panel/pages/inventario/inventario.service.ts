@@ -13,34 +13,34 @@ export class InventarioService {
   constructor(private http:HttpClient) { }
 
   public getSalidas():Observable<Salida[]>{
-    return this.http.get<Salida[]>("http://192.168.100.51:7220/api/Salidas");
+    return this.http.get<Salida[]>("http://localhost:8080/salidainventarios");
   }
   public getEntradas():Observable<Entrada[]>{
-    return this.http.get<Entrada[]>("http://192.168.100.51:7220/api/Entradas");
+    return this.http.get<Entrada[]>("http://localhost:8080/entradainventarios");
   }
  
   public agregarEntrada(datos:Entrada){
-    return this.http.post("http://192.168.100.51:7220/api/Entradas",datos);
+    return this.http.post("http://localhost:8080/entradainventarios",datos);
   }
 
   public agregarSalida(datos:Salida){
-    return this.http.post("http://192.168.100.51:7220/api/Salidas",datos);
+    return this.http.post("http://localhost:8080/salidainventarios",datos);
   }
 
   public agregarInventario(datos:Inventario){
-    return this.http.post("http://192.168.100.51:7220/api/Inventarios",datos);
+    return this.http.post("http://localhost:8080/inventarios",datos);
   }
 
   public getInventario():Observable<Inventario[]>{
-    return this.http.get<Inventario[]>("http://192.168.100.51:7220/api/Inventarios");
+    return this.http.get<Inventario[]>("http://localhost:8080/inventarios");
   }
 
   public actualizarInventario(datos:Inventario){
-    return this.http.put("http://192.168.100.51:7220/api/Inventarios/".concat(''+datos.id) ,datos);
+    return this.http.put("http://localhost:8080/inventarios/".concat(''+datos.idInventario) ,datos);
   }
 
   public obtenerInventario(id:number){
-    return this.http.get("http://192.168.100.51:7220/api/Inventarios/".concat(''+id));
+    return this.http.get("http://localhost:8080/inventarios/".concat(''+id));
   }
   
 

@@ -1,8 +1,8 @@
 export interface Entrada {
-    id: number;
-    ingredienteId: number
-    unidadMedidaId: number,
+    idEntrada: number,
+    idIngrediente: number,
+    unidadMedida: string,
     cantidad: number,
     fechaEntrada: Date,
-    userId: number
+    idUsuario: number
   }

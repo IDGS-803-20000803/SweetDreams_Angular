@@ -12,9 +12,9 @@ export class AuthServicesService {
   constructor(private http:HttpClient) { }
 
   public getUsuarios():Observable<Usuario[]>{
-    return this.http.get<Usuario[]>("http://192.168.100.51:7220/api/Usuarios");
+    return this.http.get<Usuario[]>("http://localhost:8080/usuarios");
   }
   public getRolUser():Observable<rolUser[]>{
-    return this.http.get<rolUser[]>("http://192.168.100.51:7220/api/RolesUsers");
+    return this.http.get<rolUser[]>("http://localhost:8080/rolesusuarios");
   }
 }

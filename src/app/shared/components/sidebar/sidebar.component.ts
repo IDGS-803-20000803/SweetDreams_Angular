@@ -27,11 +27,7 @@ export class SidebarComponent {
         icono:'uil uil-user-md',
         router:['/','empleados']
       },
-      {
-        nombre:'Departamentos',
-        icono:'uil uil-house-user',
-        router:['/','departamentos']
-      },
+     
       {
         nombre:'Proveedores',
         icono:'uil uil-users-alt',
@@ -62,11 +58,7 @@ export class SidebarComponent {
         icono:'uil uil-apple',
         router:['/','ingredientes']
       },
-      {
-        nombre:'Unidades',
-        icono:'uil uil-invoice',
-        router:['/','unidades']
-      },
+     
       {
         nombre:'Inventario',
         icono:'uil uil-setting',

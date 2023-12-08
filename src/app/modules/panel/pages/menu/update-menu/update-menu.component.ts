@@ -37,7 +37,7 @@ export class UpdateMenuComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `ERROR AL ELIMINAR EL REGISTRO DE LA BD: ${err}`,
+          text: `Es necesario llamar al administrador del sistema: ${err}`,
         });
       }
     });
@@ -57,7 +57,7 @@ export class UpdateMenuComponent {
             Swal.fire({
               icon: 'error',
               title: 'Error de Server',
-              text: `ERROR AL ELIMINAR EL REGISTRO DE LA BD: ${error}`,
+              text: `Es necesario llamar al administrador del sistema: ${error}`,
             });
           }
         }

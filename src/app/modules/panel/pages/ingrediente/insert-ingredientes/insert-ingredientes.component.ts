@@ -13,45 +13,26 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 export class InsertIngredientesComponent {
   constructor(
     private service: IngredienteServicesService,
-    private serviceUnit: UnidadesService,
     private router: Router
   ) {}
 
   regIngredient: Ingredientes = {
-    id: 0,
-    ingrediente1: '',
-    stockMinimo: 0,
-    baja: 1,
-    fechaCreacion: new Date(),
-    fechaModificacion: new Date(),
-    usuarioModificacion: 1,
-    unidadMedidaId: 0,
+    idIngrediente: 0,
+    nombre: '',
+    unidadMedida: '',
+    cantidadMedida: 0,
+    estatus: true
   };
 
   dataUnit: any = [];
 
-  ngOnInit(): void {
-     
-    this.serviceUnit.showUnits().subscribe({
-      next: (response) => {
-        this.dataUnit = response;
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de Server',
-          text: `ERROR AL ELIMINAR EL REGISTRO DE LA BD: ${error}`,
-        });
-      },
-    });
-  }
+  ngOnInit(): void {}
 
   addIngredient() {
     // Verificar si los campos están vacíos
     if (
-      this.regIngredient.ingrediente1 === '' ||
-      this.regIngredient.stockMinimo === 0 ||
-      this.regIngredient.unidadMedidaId === 0
+      this.regIngredient.nombre === '' ||
+      this.regIngredient.unidadMedida === ''
     ) {
       Swal.fire({
         icon: 'error',
@@ -73,7 +54,7 @@ export class InsertIngredientesComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `ERROR AL ELIMINAR EL REGISTRO DE LA BD: ${error}`,
+          text: `Es necesario llamar al administrador del sistema: ${error}`,
         });
       },
     });

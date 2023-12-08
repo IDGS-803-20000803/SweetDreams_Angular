@@ -1,11 +1,10 @@
 export interface Inventario {
-    id: number,
+    idInventario: number,
     existenciaInicial: number,
     existenciaActual: number,
-    unidadMedidaId: number,
+    unidadMedida: string,
     fechaEntrada: Date,
     fechaModificacion: Date,
-    usuarioModificacion: number,
-    ingredienteId: number,
-    userId: number
+    idIngrediente: number,
+    idUsuario: number
   }

@@ -12,24 +12,16 @@
                     <table id="tblIngrediente" class="table text-center">
                       <thead>
                         <tr>
-                          <th>NOMBRE</th>
-                          <th>STOCK MINIMO</th>
-                          <th>CREACIÓN</th>
-                          <th>UNIDAD DE MEDIDA</th>
-                          <th>ACCIONES</th>
+                          <th>Nombre</th>
+                          <th>Unidad Medida</th>
+                          <th>Acciones</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let data of dataSource">
-                          <td>{{ data.ingrediente1 }}</td>
-                          <td>{{ data.stockMinimo }}</td>
-                          <td>{{ data.fechaCreacion }}</td>
-                          <td>
-                            <div *ngFor="let u of dataUnit">
-                              <p *ngIf="data.unidadMedidaId == u.id">{{ u.unidad }}</p>
-                            </div>
-                          </td>
-                          <td>
+                          <td *ngIf="data.estatus">{{ data.nombre }}</td>
+                          <td *ngIf="data.estatus">{{ data.unidadMedida }}</td>
+                          <td *ngIf="data.estatus">
                             <button
                               class="btn btn-warning m-1"
                               (click)="openEditWindow(data)"
@@ -38,7 +30,7 @@
                             </button>
                             <button
                               class="btn btn-danger m-1"
-                              (click)="dropIngredient(data.id)"
+                              (click)="dropIngredient(data.idIngrediente)"
                             >
                               ELIMINAR
                             </button>

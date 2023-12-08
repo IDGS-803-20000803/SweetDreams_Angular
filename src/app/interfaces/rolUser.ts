@@ -1,5 +1,5 @@
 export interface rolUser {
-id:number,
-userId:number,
-roleId:number
+idRolUsuario:number,
+idUsuario:number,
+idRol:number
 }

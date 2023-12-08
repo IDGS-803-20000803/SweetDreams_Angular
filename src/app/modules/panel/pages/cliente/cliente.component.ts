@@ -16,16 +16,18 @@ export class ClienteComponent {
   dtCliente :any = {}
   dtusuario : any = {}
   idUser: number = 0
+
   ngOnInit(): void {
     this.service.getClientes().subscribe({
       next: (response) => {
         this.dataSource = response;
+      
       },
       error: (error) => {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `NO HAY DATOS EN LA BD: ${error}`,
+          text: `Ocurrio un error en el servidor : ${error}`,
         });
       },
     })
@@ -36,67 +38,86 @@ export class ClienteComponent {
   }
 
   openEditWindow(data: any) {
-    this.router.navigate([`/ActualizarCliente/${data.id}`]);
+    console.log("primera vista: "+data.idCliente);
+    this.router.navigate([`/ActualizarCliente/${data.idCliente}`]);
   }
  
 
   dropCliente(id: number) {
-    this.service.obtenerCliente(id).subscribe({
-      next: (response) => {
-        this.dtCliente = response;
-        console.log('Datos Cliente', this.dtCliente);
-        this.idUser = this.dtCliente.userId
-        console.log('Id Usuario:', this.idUser);
-        
-        this.dtCliente.baja = 1
-        this.service.actualizarCliente(this.dtCliente).subscribe({
-          next:() => {
-              this.service.obtenerUsuario(this.idUser).subscribe({
-                next: (response) =>{
-                  this.dtusuario = response
-                  this.dtusuario.active = 1
-                  this.service.ActualizarUser(this.dtusuario).subscribe({
-                      next:() =>{
-                          window.location.reload()
-                      },
-                      error: (error) => {
-                        Swal.fire({
-                          icon: 'error',
-                          title: 'Error de Server',
-                          text: `Error al eliminar usuario: ${error}`,
-                        });
-                      },
+    Swal.fire({
+      title: "¿Estas Seguro de eliminar el cliente?",
+      text: "Esta Accion no puede revertirse",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, Borrarlo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Borrado!",
+          text: "El cliente ha sido borrado.",
+          icon: "success"
+        });
+        this.service.obtenerCliente(id).subscribe({
+          next: (response) => {
+            this.dtCliente = response;
+            console.log('Datos Cliente', this.dtCliente);
+            this.idUser = this.dtCliente.idUsuario;
+            console.log('Id Usuario:', this.idUser);
+            
+            this.dtCliente.estatus = false
+            this.service.actualizarCliente(this.dtCliente).subscribe({
+              next:() => {
+                  this.service.obtenerUsuario(this.idUser).subscribe({
+                    next: (response) =>{
+                      this.dtusuario = response
+                      this.dtusuario.activo = 1
+                      this.service.ActualizarUser(this.dtusuario).subscribe({
+                          next:() =>{
+                              window.location.reload()
+                          },
+                          error: (error) => {
+                            Swal.fire({
+                              icon: 'error',
+                              title: 'Error de Server',
+                              text: `Error al eliminar usuario: ${error}`,
+                            });
+                          },
+                      });
+                    },
+                    error: (error) => {
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Error de Server',
+                        text: `Error al obtener informacion del usuario: ${error}`,
+                      });
+                    },
                   });
-                },
-                error: (error) => {
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'Error de Server',
-                    text: `Error al obtener informacion del usuario: ${error}`,
-                  });
-                },
-              });
+              },
+              error: (error) => {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error de Server',
+                  text: `Error al eliminar el cliente: ${error}`,
+                });
+              },
+            });
+    
+           
           },
           error: (error) => {
             Swal.fire({
               icon: 'error',
               title: 'Error de Server',
-              text: `Error al eliminar el cliente: ${error}`,
+              text: `Error al Obtener Registro del cliente: ${error}`,
             });
           },
         });
-
-       
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de Server',
-          text: `Error al Obtener Registro del cliente: ${error}`,
-        });
-      },
+    
+      }
     });
-
+    
 
   }
 }

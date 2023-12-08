@@ -1,22 +1,11 @@
 export interface Empleado {
-    id: number,
+    idEmpleado: number,
     nombres: string,
-    apePaterno: string,
-    apeMaterno: string,
-    fotoEmpleado: string,
-    rfc: string,
-    curp: string,
-    numSeguroSocial: string,
+    apellidos: string,
     celular: string,
-    alergias: string,
-    observaciones: string,
     codigoPostal: string,
     calle: string,
     colonia: string,
-    baja: number,
-    fechaCreacion: Date,
-    fechaModificacion: Date,
-    usuarioModificacion: number,
-    departamentoId: number,
-    userId: number
+    estatus: boolean,
+    idUsuario: number
 }

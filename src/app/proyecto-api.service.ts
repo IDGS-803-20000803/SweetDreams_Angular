@@ -14,21 +14,19 @@ export class ProyectoApiService {
 
   constructor(private http:HttpClient) { }
 
-  iniciarSesion(datos:Login){
-    return this.http.post('http://192.168.100.51:7220/api/Grupos',datos)
-  }
+
 //Parte del registrar Usuario
   AgregarUsuario(datos:Usuario){
-    return this.http.post('http://192.168.100.51:7220/api/Usuarios',datos)
+    return this.http.post('http://localhost:8080/usuarios',datos)
   }
   public getUsuarios():Observable<Usuario[]>{
-    return this.http.get<Usuario[]>("http://192.168.100.51:7220/api/Usuarios");
+    return this.http.get<Usuario[]>("http://localhost:8080/usuarios");
   }
   AgregarCliente(datos:Cliente){
-    return this.http.post('http://192.168.100.51:7220/api/Clientes',datos)
+    return this.http.post('http://localhost:8080/clientes',datos)
   }
   AsignarRolCliente(datos:rolUser){
-    return this.http.post('http://192.168.100.51:7220/api/RolesUsers',datos)
+    return this.http.post('http://localhost:8080/rolesusuarios',datos)
   }
 
   //FIN

@@ -18,35 +18,33 @@ export class RegisterComponent {
   NombreUsuarioCreado:string=''
 
   user:Usuario ={
-    id:0,
-    name:'',
-    email:'',
-    password:'',
-    active:0,
-    confirmed_at:new Date()
+    idUsuario:0,
+    nombre:'',
+    correo:'',
+    contrasena:'',
+    activo:0,
+    fechaCreacion:new Date()
   }
   client:Cliente ={
-    id:0,
+    idCliente:0,
     nombres:'',
     apellidos:'',
     celular:'',
     codigoPostal:'',
     calle:'',
     colonia:'',
-    fechaCreacion:new Date(),
-    fechaModificacion: new Date(),
-    usuarioModificacion: 0,
-    baja:0,
-    userId:0
+    estatus:true,
+    idUsuario:0
   }
   rol:rolUser = {
-    id:0,
-    roleId:0,
-    userId:0
+    idRolUsuario:0,
+    idRol:0,
+    idUsuario:0
   }
  
  public dtUsuario:any =[]
  public dtUsuarioFinal:any=[]
+ 
   dtCliente: any =[]
   dtRoles: any = []
 
@@ -54,17 +52,17 @@ export class RegisterComponent {
   
   registrar() {
     // Imprimir los datos en la consola para verificar si tienen contenido
-  console.log('Datos a registrar:', this.user.email);
+  console.log('Datos a registrar:', this.user.correo);
     // Verificar si los campos están vacíos
     if (
-      this.user.name === '' ||
+      this.user.nombre === '' ||
       this.client.apellidos === '' ||
       this.client.celular === '' ||
       this.client.codigoPostal === '' ||
       this.client.calle === '' ||
       this.client.colonia === '' ||
-      this.user.email === '' ||
-      this.user.password === ''
+      this.user.correo === '' ||
+      this.user.contrasena === ''
     ) {
       Swal.fire({
         icon: 'error',
@@ -78,10 +76,10 @@ export class RegisterComponent {
     console.log('registros DB', this.dtUsuario);
 
     this.dtUsuario.forEach((usuario: any) => {
-      console.log('datos de dtUsuarios:', usuario.email);
-      console.log('datos de entrada', this.user.email);
+      console.log('datos de dtUsuarios:', usuario.correo);
+      console.log('datos de entrada', this.user.correo);
 
-      if (usuario.email === this.user.email && usuario.active === 0) {
+      if (usuario.correo === this.user.correo && usuario.active === 0) {
         Swal.fire({
           icon: 'error',
           title: 'Ya existe este correo',
@@ -110,12 +108,12 @@ export class RegisterComponent {
            
             
            this.user = {
-            id:0,
-            name:'',
-            email:'',
-            password:'',
-            active:0,
-            confirmed_at:new Date()
+            idUsuario:0,
+            nombre:'',
+            correo:'',
+            contrasena:'',
+            activo:0,
+            fechaCreacion:new Date()
             };
 
             
@@ -145,9 +143,9 @@ export class RegisterComponent {
               this.dtUsuario = response;
               console.log('Tabla usuarios Final', this.dtUsuario);
               this.dtUsuarioFinal = this.dtUsuario[this.dtUsuario.length -1]
-              this.IdUsuarioCreado = this.dtUsuarioFinal.id
+              this.IdUsuarioCreado = this.dtUsuarioFinal.idUsuario
               console.log('IdUsuario Creado:', this.IdUsuarioCreado);
-              this.NombreUsuarioCreado = this.dtUsuarioFinal.name
+              this.NombreUsuarioCreado = this.dtUsuarioFinal.nombre
               console.log('Nombre Usuario Creado', this.NombreUsuarioCreado);
               
               this.AgregarCliente()
@@ -174,10 +172,10 @@ export class RegisterComponent {
   AgregarCliente()
   {
     this.client.nombres = this.NombreUsuarioCreado
-    this.client.userId = this.IdUsuarioCreado
+    this.client.idUsuario = this.IdUsuarioCreado
 
-    this.rol.userId = this.IdUsuarioCreado
-    this.rol.roleId = 2
+    this.rol.idUsuario = this.IdUsuarioCreado
+    this.rol.idRol = 2
     console.log('Datos del cliente a insertar', this.client);
     
     this.register.AgregarCliente(this.client ).subscribe({
@@ -185,18 +183,15 @@ export class RegisterComponent {
         console.log('Despues de Insertar el Cliente', res);
         this.AsignarRol()
         this.client ={
-          id:0,
+          idCliente:0,
           nombres: '',
           apellidos: '',
           celular: '',
           codigoPostal: '',
           calle: '',
           colonia: '',
-          fechaCreacion:new Date(),
-          fechaModificacion: new Date(),
-          usuarioModificacion: 0,
-          baja:0,
-          userId:0
+          estatus:true,
+          idUsuario:0
          }
       },
       error: error => console.log(error)

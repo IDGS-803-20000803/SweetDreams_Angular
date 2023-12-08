@@ -11,16 +11,12 @@
                 <input name="id" [(ngModel)]="actIngredient.id" readonly class="inputField" type="text" >
             </div>
             <div class="inputContainer">
-            <input name="ingrediente1" [(ngModel)]="actIngredient.ingrediente1" placeholder="Ingrediente" class="inputField" type="text" >
+            <input name="nombre" [(ngModel)]="actIngredient.nombre" placeholder="Ingrediente" class="inputField" type="text" >
             </div>
         <div class="inputContainer">
-            <input name="stockMinimo" [(ngModel)]="actIngredient.stockMinimo" placeholder="Stock Minimo"  class="inputField" type="text" >
+            <input name="unidadMedida" [(ngModel)]="actIngredient.unidadMedida" placeholder="Unidad Medida"  class="inputField" type="text" >
         </div>   
-        <div class="inputContainer">
-            <select class="form-select" name="unidadMedidaId" [(ngModel)]="actIngredient.unidadMedidaId">
-                <option *ngFor="let data of dataUnit" [value]="data.id">{{ data.unidad }}</option>
-            </select>
-      </div>   
+        
         <button id="button">Actualizar</button>
         </form>
                  

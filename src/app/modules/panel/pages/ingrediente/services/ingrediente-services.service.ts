@@ -10,33 +10,33 @@ export class IngredienteServicesService {
   constructor(public http: HttpClient) {}
 
   showIngredients() {
-    return this.http.get('http://192.168.100.51:7220/api/Ingredientes');
+    return this.http.get('http://localhost:8080/ingredientes');
   }
 
   searchIngredient(id: number) {
-    return this.http.get(`http://192.168.100.51:7220/api/Ingredientes/${id}`);
+    return this.http.get(`http://localhost:8080/ingredientes/${id}`);
   }
 
   insertIngredient(ingredient: Ingredientes) {
     return this.http.post(
-      'http://192.168.100.51:7220/api/Ingredientes',
+      'http://localhost:8080/ingredientes',
       ingredient
     );
   }
 
   updateIngredient(ingredient: Ingredientes) {
     return this.http.put(
-      `http://192.168.100.51:7220/api/Ingredientes/${ingredient.id}`,
+      `http://localhost:8080/ingredientes/${ingredient.idIngrediente}`,
       ingredient
     );
   }
 
   deleteIngredient(id: number) {
-    return this.http.delete(`http://192.168.100.51:7220/api/Ingredientes/${id}`);
+    return this.http.delete(`http://10.16.14.95:7220/api/Ingredientes/${id}`);
   }
 
   buscarUnidadMedida(id:number){
-    return this.http.get(`http://192.168.100.51:7220/api/UnidadMedidums/${id}`);
+    return this.http.get(`http://10.16.14.95:7220/api/UnidadMedidums/${id}`);
  
   }
 

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { EmpleadoService } from '../empleado.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { DepartamentoServicesService } from '../../departamentos/departamento-services.service';
+
 
 @Component({
   selector: 'app-actualizar-empleado',
@@ -11,7 +11,7 @@ import { DepartamentoServicesService } from '../../departamentos/departamento-se
 })
 export class ActualizarEmpleadoComponent {
   constructor(
-    private service: EmpleadoService,  private depart: DepartamentoServicesService,
+    private service: EmpleadoService,
     private router: Router,
     private recover: ActivatedRoute 
   ) {}
@@ -24,7 +24,7 @@ export class ActualizarEmpleadoComponent {
 
   ngOnInit(): void {
     this.recover.paramMap.subscribe((params) => {
-      const idParam = params.get('id');
+      const idParam = params.get('idEmpleado');
       if (idParam) {
         this.id = Number(idParam);
       } else {
@@ -32,24 +32,13 @@ export class ActualizarEmpleadoComponent {
       }
     });
 
-    this.depart.showDepartments().subscribe({
-      next: (response) => {
-        this.dataDepart = response;
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de Server',
-          text: `ERROR AL ELIMINAR EL REGISTRO DE LA BD: ${error}`,
-        });
-      },
-    });
+   
 
     this.service.obtenerEmpleado(this.id).subscribe({
       next: (response) => {
         this.emple = response;
         console.log('Datos Cliente', this.emple);
-        this.idUser = this.emple.userId
+        this.idUser = this.emple.idUsuario
         console.log('Id Usuario:', this.idUser);
 
         this.service.obtenerUsuario(this.idUser).subscribe({
@@ -78,7 +67,7 @@ export class ActualizarEmpleadoComponent {
   }
 
   ActualizarEmpleado(){
-    this.emple.nombres = this.actUsuario.name
+    this.emple.nombres = this.actUsuario.nombre
     console.log('Datos del cliente', this.emple);
     
     this.service.actualizarEmpleado(this.emple).subscribe({

@@ -13,8 +13,10 @@ export class RecetaComponent {
   constructor(public service: RecetaService, public serviceD: DetalleService, private router: Router) {}
 
   dataSource: any = [];
-  idReceta:number = 0
-  dtRecetas: any = []
+  idReceta:number = 0;
+  dtRecetas: any = [];
+  dtRecetaEditar :any = [];
+  dtRecetaEliminar :any = [];
 
   ngOnInit(): void {
     this.service.showRecipes().subscribe({
@@ -25,7 +27,7 @@ export class RecetaComponent {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `NO HAY DATOS EN LA BD: ${error}`,
+          text: `Es necesario llamar al administrador del sistema: ${error}`,
         });
       },
     });
@@ -36,74 +38,108 @@ export class RecetaComponent {
   }
 
   openEditWindow(data: any) {
-    this.router.navigate([`/editReceta/${data.id}`]);
+    this.router.navigate([`/editReceta/${data.idReceta}`]);
   }
 
   detalles(){
   this.serviceD.showDetail().subscribe({
     next: (response) => {
-      this.dtRecetas = response;
-      this.filterData();
-      this.dropDetail();
-      this.service.deleteRecipe(this.idReceta).subscribe({
-        next: () => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Eliminacion',
-            text: 'Registro Eliminado con Exito',
-          });
-          window.location.reload();
-        },
-        error: (error) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error de Server',
-            text: `NO HAY DATOS EN LA BD: ${error}`,
-          });
-        },
-      }); 
+      //this.dtRecetas = response;
+      this.dtRecetaEliminar = response;
+
+      for (let index = 0; index < this.dtRecetaEliminar.length; index++) {
+
+          if (this.dtRecetaEliminar[index].estatus) {
+            if (this.dtRecetaEliminar[index].idReceta == this.idReceta) {
+              this.dtRecetas.push(this.dtRecetaEliminar[index]);
+            }
+          }
+        
+      }
+
+      if (this.dtRecetas.length > 0) {
+        for (let i = 0; i < this.dtRecetas.length; i++) {
+        this.dtRecetas[i].estatus = false;
+        this.serviceD.updateDetail(this.dtRecetas[i]).subscribe({
+          next: () => {
+
+          },
+          error: (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error de Server',
+              text: `Es necesario llamar al administrador del sistema: ${error}`,
+            });
+          }
+        });
+        
+        }
+      }
+      window.location.reload()
+      //this.filterData();
+      //this.dropDetail();
+      
     },
     error: (error) => {
       Swal.fire({
         icon: 'error',
         title: 'Error de Server',
-        text: `NO HAY DATOS EN LA BD: ${error}`,
+        text: `Es necesario llamar al administrador del sistema: ${error}`,
       });
     },
   });}
 
   dropRecipe(id: number) {
-    this.idReceta = id
-    this.detalles()
-  }
+    Swal.fire({
+      title: "¿Estas Seguro de eliminar la Receta?",
+      text: "Esta Accion no puede revertirse",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, Borrarlo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Borrado!",
+          text: "La Receta ha sido borrada.",
+          icon: "success"
+        });
+        this.idReceta = id
+    this.service.searchRecipe(this.idReceta).subscribe({
+      next: (response) => {
+        this.dtRecetaEditar = response
+        this.dtRecetaEditar.estatus = false;
+        this.service.updateRecipe(this.dtRecetaEditar).subscribe({
+          next: () => {
+            this.detalles()
 
-  private filterData(): void {
-    this.dtRecetas = this.dtRecetas.filter(
-      (item: any) => item.recetaId === this.idReceta
-    );
-    console.log('Filtrado', this.dtRecetas);
-    
-  }
-
-  dropDetail() {
-    this.dtRecetas.forEach((detallesR : any) =>{
-    this.serviceD.deleteDetail(detallesR.id).subscribe({
-      next: () => {
-       console.log('Detalle Eliminado');
+          },
+          error: (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error de Server',
+              text: `Es necesario llamar al administrador del sistema: ${error}`,
+            });
+          }
+        });
       },
       error: (error) => {
         Swal.fire({
           icon: 'error',
           title: 'Error de Server',
-          text: `NO HAY DATOS EN LA BD: ${error}`,
+          text: `Es necesario llamar al administrador del sistema: ${error}`,
         });
-      },
+      }
     });
+    
+      }
     });
+    
+   
   }
 
-
   openDetailWindow(data: any) {
-    this.router.navigate([`/detalle/${data.id}`]);
+    this.router.navigate([`/detalle/${data.idReceta}`]);
   }
 }
